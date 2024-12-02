@@ -1,12 +1,18 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
+import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import * as winston from 'winston';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { DrizzleModule } from './drizzle/drizzle.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    DrizzleModule,
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({

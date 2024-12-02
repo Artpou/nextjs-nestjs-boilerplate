@@ -1,5 +1,15 @@
 {
   "extends": "tsconfig/nextjs.json",
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "jest.setup.js"],
-  "exclude": ["node_modules"]
+  "compilerOptions": {
+    "outDir": "./dist",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "plugins": [{ "name": "next" }]
+  },
+  "include": [
+    "../../packages/tsconfig/src",
+    "../../packages/tsconfig/next-env.d.ts",
+    ".next/types/**/*.ts"
+  ]
 }

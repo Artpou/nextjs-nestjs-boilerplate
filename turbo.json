@@ -1,13 +1,8 @@
 {
   "tasks": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**",
-        ".next/**"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**"]
     },
     "lint": {
       "outputs": []
@@ -18,5 +13,8 @@
     "test:ci": {
       "cache": false
     }
+  },
+  "remoteCache": {
+    "signature": true
   }
 }

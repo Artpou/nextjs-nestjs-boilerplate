@@ -13,7 +13,7 @@ import * as schema from './schema';
         const databasURL = configService.get<string>('DATABASE_URL');
         const pool = new Pool({
           connectionString: databasURL,
-          ssl: true,
+          ssl: process.env.NODE_ENV === 'development' ? false : true,
         });
         return drizzle(pool, { schema }) as NodePgDatabase<typeof schema>;
       },

@@ -1,5 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginDto } from 'dto';
+import { LoginDto } from '@repo/dto';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { eq } from 'drizzle-orm';

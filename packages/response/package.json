@@ -1,5 +1,5 @@
 {
-  "name": "response",
+  "name": "@repo/response",
   "version": "0.0.0",
   "main": "./index.ts",
   "types": "./index.ts",

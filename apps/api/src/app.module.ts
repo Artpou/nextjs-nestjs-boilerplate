@@ -5,18 +5,17 @@ import { LoggerMiddleware } from './logger/logger.middleware';
 import * as winston from 'winston';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DrizzleModule } from './drizzle/drizzle.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
+import { DrizzleModule } from './drizzle/drizzle.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    AuthModule,
-    DrizzleModule,
-    UsersModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    DrizzleModule,
     WinstonModule.forRoot({
       format: winston.format.combine(
         winston.format.colorize(),
@@ -27,9 +26,11 @@ import { UsersModule } from './users/users.module';
       ),
       transports: [new winston.transports.Console()],
     }),
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [LoggerMiddleware, AppService],
+  providers: [AppService, LoggerMiddleware],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

@@ -3,10 +3,17 @@
   "compilerOptions": {
     "outDir": "../../dist/apps/web",
     "baseUrl": "./",
-    "plugins": [{ "name": "next" }],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "moduleResolution": "node"
   },
   "exclude": [
     "./out/**/*",

@@ -20,7 +20,8 @@
     "lint-staged": "^13.1.0",
     "prettier": "^3.0.0",
     "turbo": "^2.3.3",
-    "typescript": "^5.5.4"
+    "typescript": "^5.0.4",
+    "@types/node": "^18.11.17"
   },
   "engines": {
     "node": ">=20.0.0"

@@ -1,13 +1,13 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { DrizzleAsyncProvider } from './drizzle/drizzle.provider';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-
+import { DRIZZLE } from './drizzle/drizzle.module';
+import { DrizzleDB } from './drizzle/types/drizzle';
 @Injectable()
 export class AppService {
-  constructor(
-    @Inject(DrizzleAsyncProvider)
-    private readonly db: NodePgDatabase,
-  ) {}
+  constructor(@Inject(DRIZZLE) private db: DrizzleDB) {}
+
+  getHello(): string {
+    return 'Hello World!';
+  }
 
   async status() {
     // db status

@@ -1,14 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 
 async function seed() {
   const app = await NestFactory.create(AppModule);
-  const usersService = app.get(UsersService);
+  const usersService = app.get(UserService);
 
   try {
     // Créer un utilisateur de test
-    await usersService.create('test@test.com', 'password123', 'Test User');
+    await usersService.create({
+      email: 'test@test.com',
+      password: 'password123',
+      name: 'Test User',
+    });
     console.log('Seed complete');
   } catch (error) {
     console.error('Seed error:', error);

@@ -6,7 +6,6 @@
   "license": "MIT",
   "devDependencies": {
     "config": "*",
-    "tsconfig": "*",
     "typescript": "^5.1.6"
   }
 }

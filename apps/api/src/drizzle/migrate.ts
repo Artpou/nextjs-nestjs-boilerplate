@@ -1,44 +1,28 @@
-import * as dotenv from 'dotenv';
-import { eq } from 'drizzle-orm';
-import { type NodePgDatabase, drizzle } from 'drizzle-orm/node-postgres';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
-import path from 'path';
-import pg from 'pg';
-import { exit } from 'process';
-
-import * as allSchema from '../../db/schema';
+import { Pool } from 'pg';
+import * as dotenv from 'dotenv';
+import { join } from 'path';
 
 dotenv.config();
 
-(async () => {
-  const pool = new pg.Pool({
-    connectionString: process.env.DATABASE_URL,
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+const runMigrations = async () => {
+  const db = drizzle(pool);
+  console.log('Running migrations...');
+
+  await migrate(db, {
+    migrationsFolder: join(process.cwd(), 'drizzle'),
   });
-  let db: NodePgDatabase<typeof allSchema> | null = null;
-  db = drizzle(pool, {
-    schema: {
-      ...allSchema,
-    },
-  });
 
-  // Look for migrations in the src/drizzle/migrations folder
-  const migrationPath = path.join(process.cwd(), 'src/drizzle/migrations');
+  console.log('Migrations completed!');
+  await pool.end();
+};
 
-  // Run the migrations
-  await migrate(db, { migrationsFolder: migrationPath });
-
-  // Insert default roles
-  for (const role of ['Super Admin', 'Admin', 'User', 'Guest']) {
-    const existingUserRole = await db
-      ?.select({
-        name: allSchema.user_role.name,
-      })
-      .from(allSchema.user_role)
-      .where(eq(allSchema.user_role.name, role));
-    if (!existingUserRole[0]) {
-      await db?.insert(allSchema.user_role).values({ name: role });
-    }
-  }
-  console.log('Migration complete');
-  exit(0);
-})();
+runMigrations().catch((err) => {
+  console.error('Migration failed!', err);
+  process.exit(1);
+});

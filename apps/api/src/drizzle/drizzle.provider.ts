@@ -12,10 +12,11 @@ export const drizzleProvider = [
     inject: [ConfigService],
     useFactory: async (configService: ConfigService) => {
       const connectionString = configService.get<string>('DATABASE_URL');
-      const pool = new Pool({
-        connectionString,
-      });
+      if (!connectionString) {
+        throw new Error('DATABASE_URL is not defined');
+      }
 
+      const pool = new Pool({ connectionString });
       return drizzle(pool, { schema }) as NodePgDatabase<typeof schema>;
     },
   },

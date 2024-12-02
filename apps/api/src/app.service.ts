@@ -8,4 +8,9 @@ export class AppService {
     @Inject(DrizzleAsyncProvider)
     private readonly db: NodePgDatabase,
   ) {}
+
+  async status() {
+    // db status
+    // return this.db.query.users.findMany();
+  }
 }

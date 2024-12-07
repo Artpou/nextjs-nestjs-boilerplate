@@ -1,9 +1,7 @@
-import * as Joi from 'joi';
+import { z } from 'zod';
 
-export interface EnvironmentVariables {
-  DATABASE_URL: string;
-}
-
-export const validationSchemaForEnv = Joi.object<EnvironmentVariables, true>({
-  DATABASE_URL: Joi.string().required(),
+export const environmentSchema = z.object({
+  DATABASE_URL: z.string(),
 });
+
+export type EnvironmentVariables = z.infer<typeof environmentSchema>;

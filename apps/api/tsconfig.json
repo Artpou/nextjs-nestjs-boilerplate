@@ -3,6 +3,13 @@
   "compilerOptions": {
     "outDir": "../../dist/apps/api",
     "baseUrl": "./",
-    "plugins": [{ "name": "nestjs" }]
+    "plugins": [{ "name": "nestjs" }],
+    "strictNullChecks": true,
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "@db/*": ["db/*"]
+    }
   }
 }

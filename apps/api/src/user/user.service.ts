@@ -1,32 +1,31 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from '@repo/dto';
 import { hash } from 'bcrypt';
-import * as schema from 'src/drizzle/schema';
+import * as schema from '@db/schema';
 import { eq } from 'drizzle-orm';
 import { DRIZZLE } from 'src/drizzle/drizzle.module';
 import { DrizzleDB } from 'src/drizzle/types/drizzle';
+import { RegisterDto } from 'src/auth/auth.dto';
 
 @Injectable()
 export class UserService {
   constructor(@Inject(DRIZZLE) private db: DrizzleDB) {}
 
-  async create(dto: CreateUserDto): Promise<{
-    id: number;
-    email: string;
-    name: string;
-  }> {
+  async create(dto: RegisterDto): Promise<any> {
     try {
-      const users = await this.db.insert(schema.users).values({
-        ...dto,
-        password: await hash(dto.password, 10),
-      }).returning({
-        id: schema.users.id,
-        email: schema.users.email,
-        name: schema.users.name,
-      });
+      const users = await this.db
+        .insert(schema.users)
+        .values({
+          ...dto,
+          password: await hash(dto.password, 10),
+        })
+        .returning({
+          id: schema.users.id,
+          email: schema.users.email,
+          name: schema.users.name,
+        });
 
       return users[0];
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === '23505') {
         throw new ConflictException('email duplicated');
       }

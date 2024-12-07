@@ -1,9 +1,16 @@
-import { Body, Controller, Post, Request, UseGuards, Get, Req } from '@nestjs/common';
-import { CreateUserDto, LoginDto } from '@repo/dto';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import { RefreshJwtGuard } from './refresh.guard';
-import { JwtGuard } from './jwt.guard';
+import { ApiOkResponse } from '@nestjs/swagger';
+import {
+  LoginDto,
+  RegisterDto,
+  RefreshDto,
+  LoginResponse,
+  UserResponse,
+  RefreshResponse,
+} from './auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,27 +19,22 @@ export class AuthController {
     private authService: AuthService,
   ) {}
 
-  @UseGuards(JwtGuard)
-  @Get('me')
-  async getMe(@Req() request) {
-    return { message: 'hello' };
-  }
-
   @Post('register')
-  async registerUser(@Body() dto: CreateUserDto) {
+  @ApiOkResponse({ type: RegisterDto })
+  async registerUser(@Body() dto: RegisterDto): Promise<UserResponse> {
     return await this.userService.create(dto);
   }
 
   @Post('login')
-  async login(@Body() dto: LoginDto) {
+  @ApiOkResponse({ type: LoginResponse })
+  async login(@Body() dto: LoginDto): Promise<LoginResponse> {
     return await this.authService.login(dto);
   }
 
   @UseGuards(RefreshJwtGuard)
   @Post('refresh')
-  async refreshToken(@Request() req) {
-    console.log('refreshed');
-
-    return await this.authService.refreshToken(req.user);
+  @ApiOkResponse({ type: RefreshResponse })
+  async refreshToken(@Body() dto: RefreshDto): Promise<RefreshResponse> {
+    return await this.authService.refreshToken(dto);
   }
 }

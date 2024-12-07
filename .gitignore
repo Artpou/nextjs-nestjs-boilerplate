@@ -4,7 +4,7 @@
 node_modules
 .pnp
 .pnp.js
-bun.lockb
+pnpm-lock.yaml
 
 # testing
 coverage
@@ -33,3 +33,6 @@ npm-debug.log*
 
 # turbo
 .turbo
+
+# api sdk
+@sdk

@@ -1,13 +1,20 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginDto } from '@repo/dto';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { eq } from 'drizzle-orm';
-import { users } from '../drizzle/schema';
+import { users } from '@db/schema';
 import { DRIZZLE } from 'src/drizzle/drizzle.module';
 import { DrizzleDB } from 'src/drizzle/types/drizzle';
+import { jwtDecode } from 'jwt-decode';
+import {
+  LoginDto,
+  LoginResponse,
+  RefreshDto,
+  RefreshResponse,
+} from './auth.dto';
 
-const EXPIRE_TIME = 20 * 1000;
+const ACCESS_TOKEN_EXPIRE_TIME = '30m';
+const REFRESH_TOKEN_EXPIRE_TIME = '7d';
 
 @Injectable()
 export class AuthService {
@@ -16,59 +23,63 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(dto: LoginDto) {
-    const user = await this.validateUser(dto);
-    const payload = {
-      username: user.email,
-      sub: {
-        name: user.name,
-      },
-    };
-
-    return {
-      user,
-      backendTokens: {
-        accessToken: await this.jwtService.signAsync(payload, {
-          expiresIn: '20s',
-          secret: process.env.jwtSecretKey,
-        }),
-        refreshToken: await this.jwtService.signAsync(payload, {
-          expiresIn: '7d',
-          secret: process.env.jwtRefreshTokenKey,
-        }),
-        expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
-      },
-    };
-  }
-
-  async validateUser(dto: LoginDto) {
+  async validateUser(
+    dto: LoginDto,
+  ): Promise<typeof users.$inferSelect | undefined> {
     const user = await this.db.query.users.findFirst({
-      where: eq(users.email, dto.username),
+      where: eq(users.email, dto.email),
     });
 
     if (user && (await compare(dto.password, user.password))) {
-      const { password, ...result } = user;
-      return result;
+      return user;
+    } else {
+      return undefined;
     }
-    throw new UnauthorizedException();
   }
 
-  async refreshToken(user: any) {
+  async login(dto: LoginDto): Promise<LoginResponse> {
+    const user = await this.validateUser(dto);
+
+    if (!user) throw new UnauthorizedException('Invalid credentials');
+
     const payload = {
-      username: user.username,
-      sub: user.sub,
+      sub: user.email,
+      iat: Math.floor(Date.now() / 1000),
     };
 
     return {
+      ...user,
       accessToken: await this.jwtService.signAsync(payload, {
-        expiresIn: '20s',
-        secret: process.env.jwtSecretKey,
+        expiresIn: ACCESS_TOKEN_EXPIRE_TIME,
+        secret: process.env.JWT_SECRET,
       }),
       refreshToken: await this.jwtService.signAsync(payload, {
-        expiresIn: '7d',
-        secret: process.env.jwtRefreshTokenKey,
+        expiresIn: REFRESH_TOKEN_EXPIRE_TIME,
+        secret: process.env.JWT_REFRESH_SECRET,
       }),
-      expiresIn: new Date().setTime(new Date().getTime() + EXPIRE_TIME),
+    };
+  }
+
+  async refreshToken(dto: RefreshDto): Promise<RefreshResponse> {
+    const { exp, ...payload } = jwtDecode(dto.refresh);
+
+    if (!payload.sub) throw new UnauthorizedException('Invalid token');
+
+    const newPayload = {
+      ...payload,
+      iat: Math.floor(Date.now() / 1000),
+    };
+
+    return {
+      email: payload.sub,
+      accessToken: await this.jwtService.signAsync(newPayload, {
+        expiresIn: ACCESS_TOKEN_EXPIRE_TIME,
+        secret: process.env.JWT_SECRET,
+      }),
+      refreshToken: await this.jwtService.signAsync(newPayload, {
+        expiresIn: REFRESH_TOKEN_EXPIRE_TIME,
+        secret: process.env.JWT_REFRESH_SECRET,
+      }),
     };
   }
 }

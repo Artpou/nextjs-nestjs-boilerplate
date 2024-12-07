@@ -1,27 +1,28 @@
-FROM oven/bun:1 AS builder
+FROM node:20-slim AS builder
 # Set working directory
 WORKDIR /app
-RUN bun add -g turbo
+# Install pnpm
+RUN npm install -g pnpm turbo
 COPY . .
 RUN turbo prune --scope=api --docker
 
-FROM oven/bun:1 AS installer
+FROM node:20-slim AS installer
 WORKDIR /app
 COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/bun.lockb ./bun.lockb
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 COPY --from=builder /app/turbo.json ./turbo.json
 COPY --from=builder /app/apps/api/prisma ./prisma
-RUN bun install --frozen
-RUN bunx prisma generate
+RUN pnpm install --frozen-lockfile
+RUN pnpm prisma generate
 
-FROM oven/bun:1 AS sourcer
+FROM node:20-slim AS sourcer
 WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=builder /app/out/full/ .
 COPY .gitignore .gitignore
-RUN bun run turbo run build --scope=api --include-dependencies --no-deps
+RUN pnpm turbo run build --scope=api --include-dependencies --no-deps
 
-FROM oven/bun:1 as runner
+FROM node:20-slim as runner
 WORKDIR /app
 COPY --from=sourcer /app/ .
-CMD [ "bun", "apps/api/dist/main.js" ]
+CMD [ "node", "apps/api/dist/main.js" ]

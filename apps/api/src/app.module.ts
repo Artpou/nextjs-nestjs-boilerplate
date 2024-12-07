@@ -1,14 +1,16 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { WinstonModule } from 'nest-winston';
 import { ConfigModule } from '@nestjs/config';
-import { LoggerMiddleware } from './logger/logger.middleware';
-import * as winston from 'winston';
+import { LoggerMiddleware } from './logger.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DrizzleModule } from './drizzle/drizzle.module';
-import { JwtModule } from '@nestjs/jwt';
+import { LoggerModule } from 'nestjs-pino';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { TesterModule } from './tester/tester.module';
+import { HttpExceptionFilter } from './http-exception.filter';
+import { ZodValidationPipe } from 'nestjs-zod';
 
 @Module({
   imports: [
@@ -16,21 +18,35 @@ import { JwtModule } from '@nestjs/jwt';
       isGlobal: true,
     }),
     DrizzleModule,
-    WinstonModule.forRoot({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.ms(),
-        winston.format.printf(({ level, message, ms }) => {
-          return `${level} ${message} ${ms}`;
-        }),
-      ),
-      transports: [new winston.transports.Console()],
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            singleLine: true,
+            ignore: 'pid,hostname,req,res',
+          },
+        },
+        autoLogging: false,
+      },
     }),
     UserModule,
     AuthModule,
+    TesterModule,
   ],
   controllers: [AppController],
-  providers: [AppService, LoggerMiddleware],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+    AppService,
+  ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {

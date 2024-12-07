@@ -1,9 +1,15 @@
-import { auth } from "@/auth";
 import Link from "next/link";
+
 import LogoutButton from "./components/ButtonLogout";
+
+import { GET, POST } from "@/app/fetcher";
+import { auth } from "@/auth";
 
 export default async function Home() {
   const session = await auth();
+  console.log("🚀 ~ Home ~ session:", session?.user?.email);
+
+  // const test = await POST("/tester/post", { body: { id: "" } });
 
   return (
     <section className="flex flex-col items-center justify-center gap-4">
@@ -15,10 +21,10 @@ export default async function Home() {
         </div>
       ) : (
         <div className="flex gap-4">
-          <Link href="/login" className="btn btn-primary">
+          <Link className="btn btn-primary" href="/login">
             Login
           </Link>
-          <Link href="/signup" className="btn">
+          <Link className="btn" href="/signup">
             Sign Up
           </Link>
         </div>

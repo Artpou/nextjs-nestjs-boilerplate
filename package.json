@@ -2,14 +2,10 @@
   "name": "turborepo-basic-shared",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
+    "build": "pnpm turbo run build",
+    "dev": "pnpm turbo run dev --parallel",
+    "lint": "pnpm turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
@@ -26,11 +22,8 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "packageManager": "bun@1.1.7",
+  "packageManager": "pnpm@9.14.4",
   "trustedDependencies": [
     "@nestjs/core"
-  ],
-  "dependencies": {
-    "bcrypt": "^5.1.1"
-  }
+  ]
 }

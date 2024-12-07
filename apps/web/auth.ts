@@ -1,36 +1,54 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
+import { POST as POSTAPI } from "@/app/fetcher";
+import { jwtDecode } from "jwt-decode";
+
+type CredentialToken = {
+  email: string;
+  access: {
+    token: string;
+    validUntil: number;
+  };
+  refresh: {
+    token: string;
+    validUntil: number;
+  };
+};
 
 export const config: NextAuthConfig = {
   providers: [
     Credentials({
       credentials: {
-        username: { label: "Username", type: "text" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) return null;
+        if (!credentials?.email || !credentials?.password) return null;
 
-        try {
-          const res = await fetch(
-            process.env.NEXT_PUBLIC_BACKEND_URL + "/auth/login",
-            {
-              method: "POST",
-              body: JSON.stringify({
-                username: credentials.username,
-                password: credentials.password,
-              }),
-              headers: { "Content-Type": "application/json" },
-            }
-          );
+        const { data, error } = await POSTAPI("/auth/login", {
+          body: {
+            email: credentials.email as string,
+            password: credentials.password as string,
+          },
+        });
 
-          if (!res.ok) return null;
-          const user = await res.json();
-          return user;
-        } catch (error) {
-          return null;
-        }
+        if (error) return null;
+
+        const access = jwtDecode(data.accessToken);
+        const refresh = jwtDecode(data.refreshToken);
+
+        return {
+          email: data?.email || "",
+          access: {
+            token: data?.accessToken || "",
+            validUntil: access.exp,
+          },
+          refresh: {
+            token: data?.refreshToken || "",
+            validUntil: refresh.exp,
+          },
+        };
       },
     }),
   ],
@@ -38,24 +56,57 @@ export const config: NextAuthConfig = {
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
 
-      if (new Date().getTime() < token.backendTokens.expiresIn) return token;
+      const credentialToken = token as CredentialToken;
+      const isExpired =
+        new Date().getTime() >
+        (credentialToken?.access?.validUntil || 0) * 1000;
 
-      return await refreshToken(token);
-    },
-    async session({ token, session }: { token: any; session: any }) {
-      session.user = {
-        id: token.user.id.toString(),
-        email: token.user.email,
-        name: token.user.name,
-        emailVerified: null,
+      console.log(
+        "🚀 ~ jwt ~ validUntil:",
+        credentialToken?.access?.validUntil * 1000,
+        new Date().getTime(),
+        isExpired,
+      );
+
+      if (!isExpired) return token;
+
+      const { data, error } = await POSTAPI("/auth/refresh", {
+        headers: {
+          authorization: `Refresh ${credentialToken?.refresh?.token}`,
+        },
+        body: {
+          refresh: credentialToken?.refresh?.token,
+        },
+      });
+
+      if (error) return null;
+
+      console.log(data);
+
+      const access = jwtDecode(data.accessToken);
+      const refresh = jwtDecode(data.refreshToken);
+
+      return {
+        ...credentialToken,
+        access: {
+          token: data?.accessToken || "",
+          validUntil: access.exp,
+        },
+        refresh: {
+          token: data?.refreshToken || "",
+          validUntil: refresh.exp,
+        },
       };
-      session.backendTokens = token.backendTokens;
+    },
+    async session({ token, session }) {
+      // @ts-ignore
+      session.accessToken = token.access.token;
+      // @ts-ignore
+      session.refreshToken = token.refresh.token;
       return session;
     },
   },
-  pages: {
-    signIn: "/login",
-  },
+  pages: {},
 } satisfies NextAuthConfig;
 
 export const {
@@ -64,22 +115,3 @@ export const {
   signIn,
   signOut,
 } = NextAuth(config);
-
-async function refreshToken(token: any) {
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_URL + "/auth/refresh",
-    {
-      method: "POST",
-      headers: {
-        authorization: `Refresh ${token.backendTokens.refreshToken}`,
-      },
-    }
-  );
-
-  const response = await res.json();
-
-  return {
-    ...token,
-    backendTokens: response,
-  };
-}

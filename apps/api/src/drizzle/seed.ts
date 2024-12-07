@@ -11,7 +11,6 @@ async function seed() {
     await usersService.create({
       email: 'test@test.com',
       password: 'password123',
-      name: 'Test User',
     });
     console.log('Seed complete');
   } catch (error) {

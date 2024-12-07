@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import React, { useRef } from "react";
 import { useRouter } from "next/navigation";
+import { signInAction } from "../actions";
 
 type FormInputs = {
   email: string;
@@ -19,11 +20,10 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
-      const result = await signIn("credentials", {
-        username: data.current.email,
-        password: data.current.password,
-        redirect: false,
-      });
+      const result = await signInAction(
+        data.current.email,
+        data.current.password,
+      );
 
       if (result?.error) {
         alert(result.error);

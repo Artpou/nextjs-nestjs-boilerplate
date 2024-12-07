@@ -10,41 +10,41 @@ module.exports = {
   scripts: {
     prepare: {
       default: `nps prepare.web prepare.api`,
-      web: `bun install`,
+      web: `pnpm install`,
       api: `nps prepare.docker prisma.migrate.dev`,
       docker: "docker compose up -d",
       ci: {
-        web: `npx turbo prune --scope=web && cd out && bun install --frozen`,
-        api: `npx turbo prune --scope=api && cd out && bun install --frozen && nps prisma.generate`,
+        web: `npx turbo prune --scope=web && cd out && pnpm install --frozen-lockfile`,
+        api: `npx turbo prune --scope=api && cd out && pnpm install --frozen-lockfile && nps prisma.generate`,
       },
     },
     test: {
       default: `nps test.web test.api`,
-      web: `cd ${webPath} && bun test`,
-      api: `cd ${apiPath} && bun test`,
+      web: `cd ${webPath} && pnpm test`,
+      api: `cd ${apiPath} && pnpm test`,
       ci: {
         default: `nps test.ci.web test.ci.api`,
-        web: `cd ${ciWebPath} && bun test:ci`,
-        api: `cd ${ciApiPath} && bun test:ci`,
+        web: `cd ${ciWebPath} && pnpm test:ci`,
+        api: `cd ${ciApiPath} && pnpm test:ci`,
       },
       watch: {
         default: `nps test.watch.web test.watch.api`,
-        web: `cd ${webPath} && bun test:watch`,
-        api: `cd ${apiPath} && bun test:watch`,
+        web: `cd ${webPath} && pnpm test:watch`,
+        api: `cd ${apiPath} && pnpm test:watch`,
       },
     },
     prisma: {
-      generate: `cd ${apiPath} && bun prisma generate`,
-      studio: `cd ${apiPath} && bun prisma studio`,
+      generate: `cd ${apiPath} && pnpm prisma generate`,
+      studio: `cd ${apiPath} && pnpm prisma studio`,
       migrate: {
-        dev: `cd ${apiPath} && bun prisma migrate dev`,
+        dev: `cd ${apiPath} && pnpm prisma migrate dev`,
       },
     },
     build: {
       default: "npx turbo run build",
       ci: {
-        web: "cd out && bun run build",
-        api: "cd out && bun run build",
+        web: "cd out && pnpm run build",
+        api: "cd out && pnpm run build",
       },
     },
     docker: {

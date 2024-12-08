@@ -1,16 +1,17 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { LoggerModule } from 'nestjs-pino';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { ZodValidationPipe } from 'nestjs-zod';
+
 import { LoggerMiddleware } from './logger.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DrizzleModule } from './drizzle/drizzle.module';
-import { LoggerModule } from 'nestjs-pino';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { TesterModule } from './tester/tester.module';
 import { HttpExceptionFilter } from './http-exception.filter';
-import { ZodValidationPipe } from 'nestjs-zod';
 
 @Module({
   imports: [

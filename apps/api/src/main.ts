@@ -1,6 +1,5 @@
 import { Logger } from 'nestjs-pino';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -9,6 +8,8 @@ import fastifyCookie from '@fastify/cookie';
 import helmet from '@fastify/helmet';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { patchNestJsSwagger } from 'nestjs-zod';
+
+import { AppModule } from './app.module';
 
 const PORT = 5002;
 const IS_PROD = process.env.NODE_ENV === 'production';

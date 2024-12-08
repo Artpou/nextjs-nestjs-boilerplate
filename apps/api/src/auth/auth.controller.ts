@@ -1,8 +1,9 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
+import { ApiOkResponse } from '@nestjs/swagger';
+
 import { AuthService } from './auth.service';
 import { RefreshJwtGuard } from './refresh.guard';
-import { ApiOkResponse } from '@nestjs/swagger';
 import {
   LoginDto,
   RegisterDto,

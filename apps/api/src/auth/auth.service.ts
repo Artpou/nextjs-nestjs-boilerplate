@@ -1,11 +1,13 @@
+import type { DrizzleDB } from 'src/drizzle/types/drizzle';
+
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { eq } from 'drizzle-orm';
 import { users } from '@db/schema';
 import { DRIZZLE } from 'src/drizzle/drizzle.module';
-import { DrizzleDB } from 'src/drizzle/types/drizzle';
 import { jwtDecode } from 'jwt-decode';
+
 import {
   LoginDto,
   LoginResponse,

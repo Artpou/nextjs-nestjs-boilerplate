@@ -28,7 +28,8 @@ export class RefreshJwtGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private extractTokenFromHeader(request: any) {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Refresh' ? token : undefined;
   }

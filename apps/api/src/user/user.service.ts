@@ -1,16 +1,18 @@
+import type { DrizzleDB } from 'src/drizzle/types/drizzle';
+
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import * as schema from '@db/schema';
 import { eq } from 'drizzle-orm';
 import { DRIZZLE } from 'src/drizzle/drizzle.module';
-import { DrizzleDB } from 'src/drizzle/types/drizzle';
-import { RegisterDto } from 'src/auth/auth.dto';
+import { RegisterDto, UserResponse } from 'src/auth/auth.dto';
+import { DatabaseError } from 'pg';
 
 @Injectable()
 export class UserService {
   constructor(@Inject(DRIZZLE) private db: DrizzleDB) {}
 
-  async create(dto: RegisterDto): Promise<any> {
+  async create(dto: RegisterDto): Promise<UserResponse> {
     try {
       const users = await this.db
         .insert(schema.users)
@@ -24,9 +26,13 @@ export class UserService {
           name: schema.users.name,
         });
 
+      if (!users[0]) {
+        throw new Error('User creation failed');
+      }
+
       return users[0];
-    } catch (error: any) {
-      if (error.code === '23505') {
+    } catch (error) {
+      if (error instanceof DatabaseError && error.code === '23505') {
         throw new ConflictException('email duplicated');
       }
 

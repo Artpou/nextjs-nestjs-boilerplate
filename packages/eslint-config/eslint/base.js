@@ -1,9 +1,9 @@
 import js from "@eslint/js";
-import eslintConfigPrettier from "eslint-config-prettier";
-import turboPlugin from "eslint-plugin-turbo";
+import configPrettier from "eslint-config-prettier";
+import configTurbo from "eslint-config-turbo";
 import tseslint from "typescript-eslint";
-import onlyWarn from "eslint-plugin-only-warn";
-import importPlugin from "eslint-plugin-import";
+import pluginTurbo from "eslint-plugin-turbo";
+import pluginImport from "eslint-plugin-import";
 
 /**
  * A shared ESLint configuration for the repository.
@@ -12,12 +12,12 @@ import importPlugin from "eslint-plugin-import";
  * */
 export const config = [
   js.configs.recommended,
-  eslintConfigPrettier,
+    configPrettier,
   ...tseslint.configs.recommended,
   {
     plugins: {
-      turbo: turboPlugin,
-      import: importPlugin,
+      turbo: pluginTurbo,
+      import: pluginImport,
     },
     rules: {
       "no-console": "warn",

@@ -27,7 +27,8 @@ export const config: NextAuthConfig = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        if (!credentials?.email || !credentials?.password)
+          throw new Error("Missing credentials");
 
         const { data, error } = await POSTAPI("/auth/login", {
           body: {
@@ -36,7 +37,7 @@ export const config: NextAuthConfig = {
           },
         });
 
-        if (error) return null;
+        if (error) throw new Error("Invalid credentials");
 
         const access = jwtDecode(data.accessToken);
         const refresh = jwtDecode(data.refreshToken);
@@ -93,9 +94,9 @@ export const config: NextAuthConfig = {
       };
     },
     async session({ token, session }) {
-      // @ts-ignore
+      // @ts-expect-error inject
       session.accessToken = token.access.token;
-      // @ts-ignore
+      // @ts-expect-error kjkl
       session.refreshToken = token.refresh.token;
       return session;
     },

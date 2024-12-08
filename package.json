@@ -6,7 +6,8 @@
     "build": "pnpm turbo run build",
     "dev": "pnpm turbo run dev --parallel",
     "lint": "pnpm turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "generate-schema": "pnpm turbo run generate-schema --filter=server"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

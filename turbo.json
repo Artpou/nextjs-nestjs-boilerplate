@@ -3,20 +3,24 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "lint": {
       "outputs": []
     },
     "dev": {
-      "cache": false
+      "cache": false,
+      "persistent": true
     },
     "test:ci": {
+      "cache": false
+    },
+    "generate-schema": {
       "cache": false
     }
   },
   "remoteCache": {
     "signature": true
   },
-  "globalEnv": ["NODE_ENV", "JWT_SECRET", "JWT_REFRESH_SECRET"]
+  "globalEnv": ["NODE_ENV", "JWT_SECRET", "JWT_REFRESH_SECRET", "ANALYZE"]
 }

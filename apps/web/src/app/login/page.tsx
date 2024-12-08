@@ -24,6 +24,7 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginType>({
     resolver: zodResolver(LoginSchema),
@@ -40,7 +41,7 @@ const LoginPage = () => {
       router.refresh();
     },
     onError: () => {
-      alert("Failed to login");
+      setError("root", { message: "Invalid email or password" });
     },
   });
 
@@ -54,6 +55,7 @@ const LoginPage = () => {
         className="flex flex-col w-full max-w-md gap-4 justify-center items-center"
         onSubmit={handleSubmit(onSubmit)}
       >
+        {!!errors.root && <div className="alert alert-error w-full p-3">{errors.root.message}</div>}
         <InputWrapper
           className="w-full"
           label="Email"

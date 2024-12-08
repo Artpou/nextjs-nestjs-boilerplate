@@ -1,3 +1,6 @@
+/* eslint-disable no-console */
+import { exec } from 'child_process';
+
 import { Logger } from 'nestjs-pino';
 import { NestFactory } from '@nestjs/core';
 import {
@@ -22,7 +25,7 @@ async function bootstrap() {
     new FastifyAdapter(),
   );
 
-  app.enableCors({
+  await app.enableCors({
     origin: ['http://localhost:3000', 'http://localhost:3001'],
     credentials: true,
   });
@@ -48,15 +51,24 @@ async function bootstrap() {
 
   await app.listen(PORT, '0.0.0.0');
 
-  app.useLogger(app.get(Logger));
+  await app.useLogger(app.get(Logger));
   const bootTime = Date.now() - startTime;
   console.log(`
   \x1b[31m⚡Nest.js 10.1.3\x1b[0m
   - Local:        http://localhost:${PORT}
-  - Doc:       http://localhost:${PORT}/api
+  - Doc:          http://localhost:${PORT}/api
   - Environments: ${IS_PROD ? '.env' : '.env.local'}
 
  \x1b[32m✓\x1b[0m Ready in ${bootTime}ms`);
+
+  await exec('pnpm run generate-openapi', (error) => {
+    if (error) {
+      console.error(`Error executing command: ${error.message}`);
+      return;
+    } else {
+      console.log(' \x1b[32m✓\x1b[0m Schema generated');
+    }
+  });
 }
 
 bootstrap();

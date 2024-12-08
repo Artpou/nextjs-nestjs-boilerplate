@@ -1,5 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "NestJS",
-  "extends": "./base.json"
+  "extends": "./base.json",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+  }
 }

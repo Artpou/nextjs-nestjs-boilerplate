@@ -13,12 +13,13 @@ export function Button({
   ...props
 }: ButtonProps) {
   return (
-    <button className={cn("btn p-4", className)} {...props}>
-      {isLoading ? (
-        <span className="loading loading-spinner loading-lg" />
-      ) : (
-        children
-      )}
+    <button
+      className={cn("btn p-4 gap-2 items-center", className)}
+      disabled={isLoading || props.disabled}
+      {...props}
+    >
+      {isLoading && <span className="loading loading-spinner w-4" />}
+      {children}
     </button>
   );
 }

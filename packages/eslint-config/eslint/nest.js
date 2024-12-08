@@ -1,6 +1,6 @@
-const baseConfig = require("./base.js");
+import { config as baseConfig } from "./base.js";
 
-/** @type {import("eslint").Linter.Config} */
-module.exports = {
-  extends: ["./base"],
-};
+/**
+ * @type {import("eslint").Linter.Config}
+ * */
+export const config = [...baseConfig];

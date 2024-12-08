@@ -20,6 +20,7 @@ export const config = [
       import: importPlugin,
     },
     rules: {
+      "no-console": "warn",
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
@@ -52,11 +53,6 @@ export const config = [
           "newlines-between": "always",
         },
       ],
-    },
-  },
-  {
-    plugins: {
-      onlyWarn,
     },
   },
   {

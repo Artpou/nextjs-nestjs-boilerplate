@@ -6,9 +6,6 @@ import { auth } from "@/auth";
 
 export default async function Home() {
   const session = await auth();
-  console.log("🚀 ~ Home ~ session:", session?.user?.email);
-
-  // const test = await POST("/tester/post", { body: { id: "" } });
 
   return (
     <section className="flex flex-col items-center justify-center gap-4">

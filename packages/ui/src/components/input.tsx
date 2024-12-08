@@ -26,7 +26,7 @@ export const InputWrapper = ({
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       {label && (
-        <label className={("gap-2 ui-text-error", error && "text-error")}>
+        <label className={cn(error && "text-error")}>
           {label}
         </label>
       )}

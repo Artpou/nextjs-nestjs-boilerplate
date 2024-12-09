@@ -5,12 +5,9 @@ import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from 'nestjs-zod';
 
 import { LoggerMiddleware } from './logger.middleware';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DrizzleModule } from './drizzle/drizzle.module';
-import { TesterModule } from './tester/tester.module';
 import { HttpExceptionFilter } from './http-exception.filter';
 
 @Module({
@@ -27,6 +24,7 @@ import { HttpExceptionFilter } from './http-exception.filter';
             colorize: true,
             singleLine: true,
             ignore: 'pid,hostname,req,res',
+            
           },
         },
         autoLogging: false,
@@ -34,9 +32,7 @@ import { HttpExceptionFilter } from './http-exception.filter';
     }),
     UserModule,
     AuthModule,
-    TesterModule,
   ],
-  controllers: [AppController],
   providers: [
     {
       provide: APP_PIPE,
@@ -46,7 +42,6 @@ import { HttpExceptionFilter } from './http-exception.filter';
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
-    AppService,
   ],
 })
 export class AppModule {

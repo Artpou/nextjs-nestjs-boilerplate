@@ -22,5 +22,5 @@
   "remoteCache": {
     "signature": true
   },
-  "globalEnv": ["NODE_ENV", "JWT_SECRET", "JWT_REFRESH_SECRET", "ANALYZE"]
+  "globalEnv": ["NODE_ENV", "JWT_SECRET", "JWT_REFRESH_SECRET", "ANALYZE", "AUTH_SECRET"]
 }

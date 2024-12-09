@@ -23,15 +23,13 @@ const SignupPage = () => {
   });
 
   const handleRegister = async () => {
-    const { data, error } = await POST("/auth/register", {
+    const { error } = await POST("/auth/register", {
       body: {
         name: form.current.name,
         email: form.current.email,
         password: form.current.password,
       },
     });
-
-    console.log({ form: form.current });
 
     if (error) {
       alert(JSON.stringify(error));
@@ -73,7 +71,7 @@ const SignupPage = () => {
         onChange={(e) => (form.current.password = e.target.value)}
         required
       />
-      <div className="flex justify-center items-center gap-4">
+      <div className="flex items-center justify-center gap-4">
         <button className="btn btn-primary" onClick={handleRegister}>
           Submit
         </button>

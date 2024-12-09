@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import { NestFactory } from '@nestjs/core';
 
-import { AppModule } from '../app.module';
-import { UserService } from '../user/user.service';
+import { AppModule } from '../src/app.module';
+import { UserService } from '../src/user/user.service';
 
 async function seed() {
   const app = await NestFactory.create(AppModule);

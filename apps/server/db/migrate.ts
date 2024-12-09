@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { join } from 'path';
 
 import { drizzle } from 'drizzle-orm/node-postgres';

@@ -45,12 +45,12 @@ export default async function RootLayout({
       >
         <ReactQueryProvider>
           <SessionProvider session={session}>
-            <div className="relative flex flex-col h-screen">
-              <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+            <div className="relative flex h-screen flex-col">
+              <main className="container mx-auto max-w-7xl grow px-6 pt-16">
                 {children}
               </main>
-              <footer className="w-full flex items-center justify-center py-3 gap-1">
-                <span className="text-default-600">Powered by</span>
+              <footer className="flex w-full items-center justify-center gap-1 py-3">
+                <span>Powered by</span>
                 <p className="text-primary">DaisyUI</p>
               </footer>
             </div>

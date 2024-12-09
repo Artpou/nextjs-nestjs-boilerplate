@@ -52,7 +52,7 @@ const LoginPage = () => {
   return (
     <div className="container flex flex-col items-center gap-4">
       <form
-        className="flex flex-col w-full max-w-md gap-4 justify-center items-center"
+        className="flex w-full max-w-md flex-col items-center justify-center gap-4"
         onSubmit={handleSubmit(onSubmit)}
       >
         {!!errors.root && <div className="alert alert-error w-full p-3">{errors.root.message}</div>}
@@ -72,7 +72,7 @@ const LoginPage = () => {
           <Input type="password" {...register("password")} />
         </InputWrapper>
 
-        <div className="flex justify-center items-center gap-4">
+        <div className="flex items-center justify-center gap-4">
           <Button className="btn-primary" type="submit" isLoading={isPending}>
             Sign In
           </Button>

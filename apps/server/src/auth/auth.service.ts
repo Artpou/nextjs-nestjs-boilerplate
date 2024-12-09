@@ -63,7 +63,7 @@ export class AuthService {
   }
 
   async refreshToken(dto: RefreshDto): Promise<RefreshResponse> {
-    const { exp, ...payload } = jwtDecode(dto.refresh);
+    const { exp: _exp, ...payload } = jwtDecode(dto.refresh);
 
     if (!payload.sub) throw new UnauthorizedException('Invalid token');
 

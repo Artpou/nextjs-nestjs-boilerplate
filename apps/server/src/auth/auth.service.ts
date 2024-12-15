@@ -1,87 +1,81 @@
-import type { DrizzleDB } from 'src/drizzle/types/drizzle';
-
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { eq } from 'drizzle-orm';
-import { users } from '@db/schema';
-import { DRIZZLE } from 'src/drizzle/drizzle.module';
 import { jwtDecode } from 'jwt-decode';
+import { UserService } from 'src/user/user.service';
+import ms from 'ms';
 
-import {
-  LoginDto,
-  LoginResponse,
-  RefreshDto,
-  RefreshResponse,
-} from './auth.dto';
+import { LoginDto, RefreshDto, RegisterDto, TokenResponse } from './auth.dto';
 
 const ACCESS_TOKEN_EXPIRE_TIME = '30m';
-const REFRESH_TOKEN_EXPIRE_TIME = '7d';
+const REFRESH_TOKEN_EXPIRE_TIME = '30d';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(DRIZZLE) private db: DrizzleDB,
     private jwtService: JwtService,
+    private usersService: UserService,
   ) {}
 
-  async validateUser(
-    dto: LoginDto,
-  ): Promise<typeof users.$inferSelect | undefined> {
-    const user = await this.db.query.users.findFirst({
-      where: eq(users.email, dto.email),
-    });
+  private async getTokens(id: string | number) {
+    const expiresIn = Date.now() + ms(ACCESS_TOKEN_EXPIRE_TIME);
 
-    if (user && (await compare(dto.password, user.password))) {
-      return user;
-    } else {
-      return undefined;
-    }
+    const [token, refreshToken] = await Promise.all([
+      await this.jwtService.signAsync(
+        { sub: id },
+        {
+          secret: process.env.JWT_SECRET,
+          expiresIn: ACCESS_TOKEN_EXPIRE_TIME,
+        },
+      ),
+      await this.jwtService.signAsync(
+        { sub: id },
+        {
+          secret: process.env.JWT_REFRESH_SECRET,
+          expiresIn: REFRESH_TOKEN_EXPIRE_TIME,
+        },
+      ),
+    ]);
+
+    return { token, refreshToken, expiresIn };
   }
 
-  async login(dto: LoginDto): Promise<LoginResponse> {
-    const user = await this.validateUser(dto);
+  async validateUser(email: string, password: string) {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) return null;
 
+    const isValidPassword = await compare(password, user.password);
+    if (!isValidPassword) return null;
+
+    return user;
+  }
+
+  async login(dto: LoginDto): Promise<TokenResponse> {
+    const user = await this.validateUser(dto.email, dto.password);
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
-    const payload = {
-      sub: user.email,
-      iat: Math.floor(Date.now() / 1000),
-    };
+    const tokens = await this.getTokens(user.id);
 
-    return {
-      ...user,
-      accessToken: await this.jwtService.signAsync(payload, {
-        expiresIn: ACCESS_TOKEN_EXPIRE_TIME,
-        secret: process.env.JWT_SECRET,
-      }),
-      refreshToken: await this.jwtService.signAsync(payload, {
-        expiresIn: REFRESH_TOKEN_EXPIRE_TIME,
-        secret: process.env.JWT_REFRESH_SECRET,
-      }),
-    };
+    return { ...tokens, email: user.email };
   }
 
-  async refreshToken(dto: RefreshDto): Promise<RefreshResponse> {
-    const { exp: _exp, ...payload } = jwtDecode(dto.refresh);
+  async register(dto: RegisterDto): Promise<TokenResponse> {
+    const user = await this.usersService.create(dto);
+    const tokens = await this.getTokens(user.id);
 
-    if (!payload.sub) throw new UnauthorizedException('Invalid token');
+    return { ...tokens, email: user.email };
+  }
 
-    const newPayload = {
-      ...payload,
-      iat: Math.floor(Date.now() / 1000),
-    };
+  async refreshToken(dto: RefreshDto): Promise<TokenResponse> {
+    const test = jwtDecode(dto.refresh);
+    if (!test.sub) throw new UnauthorizedException('Invalid token');
 
-    return {
-      email: payload.sub,
-      accessToken: await this.jwtService.signAsync(newPayload, {
-        expiresIn: ACCESS_TOKEN_EXPIRE_TIME,
-        secret: process.env.JWT_SECRET,
-      }),
-      refreshToken: await this.jwtService.signAsync(newPayload, {
-        expiresIn: REFRESH_TOKEN_EXPIRE_TIME,
-        secret: process.env.JWT_REFRESH_SECRET,
-      }),
-    };
+    const user = await this.usersService.findById(Number(test.sub));
+
+    if (!user) throw new UnauthorizedException('User not found');
+
+    const tokens = await this.getTokens(user.id);
+
+    return { ...tokens, email: user.email };
   }
 }

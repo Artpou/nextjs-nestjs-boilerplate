@@ -24,7 +24,6 @@ import { HttpExceptionFilter } from './http-exception.filter';
             colorize: true,
             singleLine: true,
             ignore: 'pid,hostname,req,res',
-            
           },
         },
         autoLogging: false,

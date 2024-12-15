@@ -1,27 +1,17 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
-const UserSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-export class RegisterDto extends createZodDto(UserSchema) {}
-export class UserResponse extends createZodDto(
+export class RegisterDto extends createZodDto(
   z.object({
-    id: z.number(),
-    email: z.string(),
-    name: z.string().nullable(),
+    email: z.string().email(),
+    password: z.string(),
   }),
 ) {}
 
-export class LoginDto extends createZodDto(UserSchema) {}
-export class LoginResponse extends createZodDto(
+export class LoginDto extends createZodDto(
   z.object({
-    email: z.string(),
-    name: z.string().nullable(),
-    accessToken: z.string(),
-    refreshToken: z.string(),
+    email: z.string().email(),
+    password: z.string(),
   }),
 ) {}
 
@@ -30,10 +20,12 @@ export class RefreshDto extends createZodDto(
     refresh: z.string(),
   }),
 ) {}
-export class RefreshResponse extends createZodDto(
+
+export class TokenResponse extends createZodDto(
   z.object({
-    email: z.string(),
-    accessToken: z.string(),
+    token: z.string(),
     refreshToken: z.string(),
+    expiresIn: z.number(),
+    email: z.string().email(),
   }),
 ) {}

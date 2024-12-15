@@ -13,7 +13,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["AuthController_registerUser"];
+        post: operations["AuthController_register"];
         delete?: never;
         options?: never;
         head?: never;
@@ -52,6 +52,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AuthController_me"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AuthController_test"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -61,24 +93,20 @@ export interface components {
             email: string;
             password: string;
         };
+        TokenResponse: {
+            token: string;
+            refreshToken: string;
+            expiresIn: number;
+            /** Format: email */
+            email: string;
+        };
         LoginDto: {
             /** Format: email */
             email: string;
             password: string;
         };
-        LoginResponse: {
-            email: string;
-            name: string | null;
-            accessToken: string;
-            refreshToken: string;
-        };
         RefreshDto: {
             refresh: string;
-        };
-        RefreshResponse: {
-            email: string;
-            accessToken: string;
-            refreshToken: string;
         };
     };
     responses: never;
@@ -89,7 +117,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    AuthController_registerUser: {
+    AuthController_register: {
         parameters: {
             query?: never;
             header?: never;
@@ -107,7 +135,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RegisterDto"];
+                    "application/json": components["schemas"]["TokenResponse"];
                 };
             };
         };
@@ -130,7 +158,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["LoginResponse"];
+                    "application/json": components["schemas"]["TokenResponse"];
                 };
             };
         };
@@ -153,8 +181,42 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RefreshResponse"];
+                    "application/json": components["schemas"]["TokenResponse"];
                 };
+            };
+        };
+    };
+    AuthController_me: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_test: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

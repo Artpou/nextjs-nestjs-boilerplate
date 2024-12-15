@@ -1,22 +1,18 @@
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig, Session } from "next-auth";
 
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { jwtDecode } from "jwt-decode";
+import { JWT } from "next-auth/jwt";
 
-import { POST as POSTAPI } from "@/fetcher";
+type CredentialToken = JWT & {
+  token: string;
+  refreshToken: string;
+  expiresIn: number;
+};
 
-
-type CredentialToken = {
-  email: string;
-  access: {
-    token: string;
-    validUntil: number;
-  };
-  refresh: {
-    token: string;
-    validUntil: number;
-  };
+type JWTSession = Session & {
+  accessToken: string;
+  refreshToken: string;
 };
 
 export const config: NextAuthConfig = {
@@ -26,33 +22,28 @@ export const config: NextAuthConfig = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password)
-          throw new Error("Missing credentials");
-
-        const { data, error } = await POSTAPI("/auth/login", {
-          body: {
-            email: credentials.email as string,
-            password: credentials.password as string,
+      async authorize(credentials): Promise<CredentialToken> {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: credentials.email as string,
+              password: credentials.password as string,
+            }),
           },
-        });
+        );
 
-        if (error) throw new Error("Invalid credentials");
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || "Failed to authenticate");
+        }
 
-        const access = jwtDecode(data.accessToken);
-        const refresh = jwtDecode(data.refreshToken);
-
-        return {
-          email: data?.email || "",
-          access: {
-            token: data?.accessToken || "",
-            validUntil: access.exp,
-          },
-          refresh: {
-            token: data?.refreshToken || "",
-            validUntil: refresh.exp,
-          },
-        };
+        const data = await response.json();
+        return data;
       },
     }),
   ],
@@ -61,44 +52,37 @@ export const config: NextAuthConfig = {
       if (user) return { ...token, ...user };
 
       const credentialToken = token as CredentialToken;
-      const isExpired =
-        new Date().getTime() >
-        (credentialToken?.access?.validUntil || 0) * 1000;
+      const isExpired = new Date() > new Date(credentialToken?.expiresIn || 0);
 
       if (!isExpired) return token;
 
-      const { data, error } = await POSTAPI("/auth/refresh", {
-        headers: {
-          authorization: `Refresh ${credentialToken?.refresh?.token}`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${credentialToken?.token}`,
+          },
+          body: JSON.stringify({
+            refresh: credentialToken?.refreshToken,
+          }),
         },
-        body: {
-          refresh: credentialToken?.refresh?.token,
-        },
-      });
+      );
 
-      if (error) return null;
+      if (!response.ok) {
+        return null;
+      }
 
-      const access = jwtDecode(data.accessToken);
-      const refresh = jwtDecode(data.refreshToken);
-
-      return {
-        ...credentialToken,
-        access: {
-          token: data?.accessToken || "",
-          validUntil: access.exp,
-        },
-        refresh: {
-          token: data?.refreshToken || "",
-          validUntil: refresh.exp,
-        },
-      };
+      const data = await response.json();
+      return { ...token, ...data };
     },
-    async session({ token, session }) {
-      // @ts-expect-error inject
-      session.accessToken = token.access.token;
-      // @ts-expect-error kjkl
-      session.refreshToken = token.refresh.token;
-      return session;
+    async session({ token, session }): Promise<JWTSession> {
+      return {
+        ...session,
+        accessToken: (token as CredentialToken).token,
+        refreshToken: (token as CredentialToken).refreshToken,
+      };
     },
   },
   pages: {},

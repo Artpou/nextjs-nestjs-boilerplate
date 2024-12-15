@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 import pluginTurbo from "eslint-plugin-turbo";
 import pluginImport from "eslint-plugin-import";
 import pluginTailwindcss from "eslint-plugin-tailwindcss";
-import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
+import pluginJsxA11y from "eslint-plugin-jsx-a11y";
 
 /**
  * A shared ESLint configuration for the repository.
@@ -13,9 +13,9 @@ import pluginJsxA11y from 'eslint-plugin-jsx-a11y';
  * */
 export const config = [
   js.configs.recommended,
-    configPrettier,
+  configPrettier,
   ...tseslint.configs.recommended,
-  ...pluginTailwindcss.configs['flat/recommended'],
+  ...pluginTailwindcss.configs["flat/recommended"],
   pluginJsxA11y.flatConfigs.recommended,
   {
     plugins: {
@@ -28,10 +28,10 @@ export const config = [
       "@typescript-eslint/no-unused-vars": [
         "warn", // or "error"
         {
-          "argsIgnorePattern": "^_",
-          "varsIgnorePattern": "^_",
-          "caughtErrorsIgnorePattern": "^_"
-        }
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
       ],
       "turbo/no-undeclared-env-vars": "warn",
       "import/order": [

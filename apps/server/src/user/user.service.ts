@@ -5,14 +5,14 @@ import { hash } from 'bcrypt';
 import * as schema from '@db/schema';
 import { eq } from 'drizzle-orm';
 import { DRIZZLE } from 'src/drizzle/drizzle.module';
-import { RegisterDto, UserResponse } from 'src/auth/auth.dto';
+import { RegisterDto } from 'src/auth/auth.dto';
 import { DatabaseError } from 'pg';
 
 @Injectable()
 export class UserService {
   constructor(@Inject(DRIZZLE) private db: DrizzleDB) {}
 
-  async create(dto: RegisterDto): Promise<UserResponse> {
+  async create(dto: RegisterDto) {
     try {
       const users = await this.db
         .insert(schema.users)
@@ -40,11 +40,21 @@ export class UserService {
     }
   }
 
+  async exist(id: number): Promise<number | undefined> {
+    const user = await this.db.query.users.findFirst({
+      columns: { id: true },
+      where: eq(schema.users.id, id),
+    });
+
+    return user?.id;
+  }
+
   async findByEmail(email: string) {
     return await this.db.query.users.findFirst({
       where: eq(schema.users.email, email),
     });
   }
+
   async findById(id: number) {
     return await this.db.query.users.findFirst({
       where: eq(schema.users.id, id),

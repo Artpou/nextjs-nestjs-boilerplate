@@ -1,84 +1,108 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Button } from "@repo/ui/components/button";
+import { Input, InputWrapper } from "@repo/ui/components/input";
 
-import { signInAction } from "../../actions";
+import { signInAction } from "@/actions";
+import useAPI from "@/hooks/useAPI";
 
-import { POST } from "@/fetcher";
+const SignupSchema = z.object({
+  name: z.string().optional(),
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" }),
+});
 
-type FormInputs = {
-  name: string;
-  email: string;
-  password: string;
-};
+type SignupType = z.infer<typeof SignupSchema>;
 
 const SignupPage = () => {
   const router = useRouter();
-  const form = useRef<FormInputs>({
-    name: "",
-    email: "",
-    password: "",
+  const { GET, POST } = useAPI();
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<SignupType>({
+    resolver: zodResolver(SignupSchema),
   });
 
-  const handleRegister = async () => {
-    const { error } = await POST("/auth/register", {
-      body: {
-        name: form.current.name,
-        email: form.current.email,
-        password: form.current.password,
-      },
-    });
+  const { mutate: signup, isPending } = useMutation({
+    mutationFn: async (data: SignupType) => {
+      const { error } = await POST("/auth/register", {
+        body: data,
+      });
 
-    if (error) {
-      alert(JSON.stringify(error));
-      return;
-    }
+      if (error) throw error;
 
-    const result = await signInAction(
-      form.current.email,
-      form.current.password,
-    );
+      const signInResult = await signInAction(data.email, data.password);
+      if (signInResult?.error) throw signInResult.error;
+    },
+    onSuccess: () => {
+      router.push("/");
+      router.refresh();
+    },
+    onError: (error) => {
+      setError("root", { message: error.message });
+    },
+  });
 
-    if (result?.error) {
-      alert(result.error);
-      return;
-    }
-
-    router.push("/");
-    router.refresh();
+  const onSubmit = (data: SignupType): void => {
+    signup(data);
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <input
-        className="input input-bordered"
-        placeholder="Name"
-        onChange={(e) => (form.current.name = e.target.value)}
-        required
-      />
-      <input
-        className="input input-bordered"
-        placeholder="Email"
-        onChange={(e) => (form.current.email = e.target.value)}
-        required
-      />
-      <input
-        className="input input-bordered"
-        placeholder="Password"
-        type="password"
-        onChange={(e) => (form.current.password = e.target.value)}
-        required
-      />
-      <div className="flex items-center justify-center gap-4">
-        <button className="btn btn-primary" onClick={handleRegister}>
-          Submit
-        </button>
-        <Link className="btn" href={"/"}>
-          Cancel
-        </Link>
-      </div>
+    <div className="container flex flex-col items-center gap-4">
+      <form
+        className="flex w-full max-w-md flex-col items-center justify-center gap-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        {!!errors.root && (
+          <div className="alert alert-error w-full p-3">
+            {errors.root.message}
+          </div>
+        )}
+        <InputWrapper
+          className="w-full"
+          label="Name"
+          error={errors.name?.message}
+        >
+          <Input {...register("name")} />
+        </InputWrapper>
+
+        <InputWrapper
+          className="w-full"
+          label="Email"
+          error={errors.email?.message}
+        >
+          <Input type="email" {...register("email")} />
+        </InputWrapper>
+
+        <InputWrapper
+          className="w-full"
+          label="Password"
+          error={errors.password?.message}
+        >
+          <Input type="password" {...register("password")} />
+        </InputWrapper>
+
+        <div className="flex items-center justify-center gap-4">
+          <Button className="btn-primary" type="submit" isLoading={isPending}>
+            Sign Up
+          </Button>
+          <Link className="btn" href="/">
+            Cancel
+          </Link>
+        </div>
+      </form>
     </div>
   );
 };

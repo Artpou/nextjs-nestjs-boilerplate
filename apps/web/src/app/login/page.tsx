@@ -9,11 +9,13 @@ import { useMutation } from "@tanstack/react-query";
 import { Button } from "@repo/ui/components/button";
 import { Input, InputWrapper } from "@repo/ui/components/input";
 
-import { signInAction } from "../../actions";
+import { signInAction } from "@/actions";
 
 const LoginSchema = z.object({
   email: z.string().email(),
-  password: z.string(),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" }),
 });
 
 type LoginType = z.infer<typeof LoginSchema>;
@@ -55,7 +57,11 @@ const LoginPage = () => {
         className="flex w-full max-w-md flex-col items-center justify-center gap-4"
         onSubmit={handleSubmit(onSubmit)}
       >
-        {!!errors.root && <div className="alert alert-error w-full p-3">{errors.root.message}</div>}
+        {!!errors.root && (
+          <div className="alert alert-error w-full p-3">
+            {errors.root.message}
+          </div>
+        )}
         <InputWrapper
           className="w-full"
           label="Email"

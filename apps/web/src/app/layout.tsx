@@ -43,8 +43,8 @@ export default async function RootLayout({
           fontSans.variable,
         )}
       >
-        <ReactQueryProvider>
-          <SessionProvider session={session}>
+        <SessionProvider session={session} refetchOnWindowFocus={false}>
+          <ReactQueryProvider>
             <div className="relative flex h-screen flex-col">
               <main className="container mx-auto max-w-7xl grow px-6 pt-16">
                 {children}
@@ -54,8 +54,8 @@ export default async function RootLayout({
                 <p className="text-primary">DaisyUI</p>
               </footer>
             </div>
-          </SessionProvider>
-        </ReactQueryProvider>
+          </ReactQueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );

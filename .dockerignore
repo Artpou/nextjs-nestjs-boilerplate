@@ -2,3 +2,4 @@
 **/.next
 **/dist
 **/.turbo
+**/web/analyze

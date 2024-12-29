@@ -1,0 +1,39 @@
+# This project is a fullstack monorepo with turborepo using Next.js for the frontend and NestJS for the backend.
+# The codebase follows a modular architecture with shared packages for UI components and configurations.
+
+# Code Style
+max_line_length: 100
+semi: true
+trailingComma: all
+singleQuote: false
+
+# Tailwind CSS classes should follow a logical order:
+# Layout -> Positioning -> Display -> Spacing -> Typography -> Visual
+tailwind_class_order: [
+  "layout",
+  "position",
+  "display",
+  "spacing",
+  "typography",
+  "visual"
+]
+
+# Project Structure
+# - apps/web: Next.js frontend with TypeScript and React Query
+# - apps/server: NestJS backend with Drizzle ORM
+# - packages/ui: Shared React components with Shadcn UI
+# - packages/*-config: Shared configurations
+file_patterns: {
+  "apps/web/src/**/*.tsx": ["react", "next", "typescript"],
+  "apps/server/src/**/*.ts": ["nest", "typescript"],
+  "packages/ui/src/**/*.tsx": ["react", "typescript"]
+}
+
+# Import order for better code organization
+import_order: [
+  "^@/(.*)$",
+  "^@workspace/(.*)$",
+  "^[./]"
+]
+
+# Be concise for the changes you make

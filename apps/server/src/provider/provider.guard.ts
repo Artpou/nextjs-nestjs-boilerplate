@@ -1,0 +1,31 @@
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { AuthenticatedRequest } from 'src/auth/auth';
+
+import { ProviderService } from './provider.service';
+
+@Injectable()
+export class ProviderGuard implements CanActivate {
+  constructor(private providerService: ProviderService) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request: AuthenticatedRequest = context.switchToHttp().getRequest();
+    console.log('🚀 ~ ProviderGuard ~ canActivate ~ request:', request.user);
+
+    if (!request.user) throw new UnauthorizedException('No user found');
+
+    const provider = await this.providerService.findByUserId(request.user.id);
+
+    if (!provider) throw new UnauthorizedException('No provider found');
+
+    if (!provider.access_token)
+      throw new UnauthorizedException('No access token found');
+
+    request.provider = provider;
+    return true;
+  }
+}

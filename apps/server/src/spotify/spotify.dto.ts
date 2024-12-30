@@ -1,3 +1,4 @@
+import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
 
 // Base schemas
@@ -80,11 +81,19 @@ export const PagingSchema = <T extends z.ZodType>(itemSchema: T) =>
     previous: z.string().nullable(),
   });
 
+export const TrackResultsSchema = PagingSchema(TrackSchema);
+export const AlbumResultsSchema = PagingSchema(AlbumSchema);
+export const ArtistResultsSchema = PagingSchema(ArtistSchema);
+
 // Search results schema
 export const SearchResultsSchema = z.object({
-  tracks: PagingSchema(TrackSchema).optional(),
-  artists: PagingSchema(ArtistSchema).optional(),
-  albums: PagingSchema(AlbumSchema).optional(),
+  tracks: TrackResultsSchema.optional(),
+  artists: ArtistResultsSchema.optional(),
+  albums: AlbumResultsSchema.optional(),
+});
+
+export const NewReleasesSchema = z.object({
+  albums: AlbumResultsSchema,
 });
 
 // Export types
@@ -93,3 +102,11 @@ export type Album = z.infer<typeof AlbumSchema>;
 export type Track = z.infer<typeof TrackSchema>;
 export type User = z.infer<typeof UserSchema>;
 export type SearchResults = z.infer<typeof SearchResultsSchema>;
+export type TrackResults = z.infer<typeof TrackResultsSchema>;
+export type AlbumResults = z.infer<typeof AlbumResultsSchema>;
+export type NewReleases = z.infer<typeof NewReleasesSchema>;
+// dto
+export class SearchDto extends createZodDto(SearchResultsSchema) {}
+export class TrackDto extends createZodDto(TrackResultsSchema) {}
+export class AlbumDto extends createZodDto(AlbumResultsSchema) {}
+export class NewReleasesDto extends createZodDto(NewReleasesSchema) {}

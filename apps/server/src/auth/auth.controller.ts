@@ -4,8 +4,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpCode,
-  HttpStatus,
   Post,
   UseGuards,
   Request,
@@ -38,7 +36,6 @@ export class AuthController {
   }
 
   @Post('spotify')
-  @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: TokenResponse })
   async spotifyAuth(@Body() dto: SpotifyAuthDto): Promise<TokenResponse> {
     return this.authService.authenticateSpotify(dto);
@@ -59,7 +56,6 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.OK)
   async me(@Request() req: AuthenticatedRequest) {
     return await this.userService.findById(req.user.id);
   }

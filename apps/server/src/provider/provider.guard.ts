@@ -14,7 +14,6 @@ export class ProviderGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: AuthenticatedRequest = context.switchToHttp().getRequest();
-    console.log('🚀 ~ ProviderGuard ~ canActivate ~ request:', request.user);
 
     if (!request.user) throw new UnauthorizedException('No user found');
 

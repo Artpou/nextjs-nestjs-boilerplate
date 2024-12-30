@@ -5,20 +5,19 @@ import { useState, useRef, useEffect } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { Input } from "@workspace/ui/components/input";
 import { ScrollArea } from "@workspace/ui/components/scroll-area";
-import { Play, Search, Star } from "lucide-react";
-import Image from "next/image";
+import { SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Loading } from "@workspace/ui/components/loading";
 import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
-import { Button } from "@workspace/ui/components/button";
-import Link from "next/link";
+
+import { CardItem } from "./CardItem";
 
 import useAPI from "@/hooks/useAPI";
 
 const DEBOUNCE_TIME = 1000;
 const STALE_TIME = 1000 * 60 * 5;
 
-export const SearchArtist = () => {
+export const Search = () => {
   const t = useTranslations();
   const [search, setSearch] = useState("");
   const [type, setType] = useState<"artist" | "album" | "track">("album");
@@ -46,7 +45,7 @@ export const SearchArtist = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["search", debouncedSearch, type],
     queryFn: async () => {
-      if (!debouncedSearch) return { items: [] };
+      if (!debouncedSearch) return {};
 
       const { data } = await GET("/search", {
         params: {
@@ -54,18 +53,19 @@ export const SearchArtist = () => {
         },
       });
 
-      return data || { items: [] };
+      return data || {};
     },
     enabled: shouldShowResults,
     staleTime: STALE_TIME,
   });
 
-  const items = data?.items || [];
+  const items =
+    data?.tracks?.items || data?.artists?.items || data?.albums?.items || [];
 
   return (
     <div className="mx-auto w-full max-w-xl" ref={containerRef}>
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <SearchIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           type="text"
           className="pl-9"
@@ -115,59 +115,19 @@ export const SearchArtist = () => {
                 )}
                 {shouldShowResults &&
                   !isLoading &&
-                  items?.map((item) => {
-                    const image =
-                      item.images?.[0]?.url || item.album?.images?.[0]?.url;
-
-                    const artists = item.artists?.map((artist) => artist.name);
-                    const year = item?.release_date
-                      ? new Date(item.release_date).getFullYear().toString()
-                      : null;
-
-                    return (
-                      <div
-                        key={item.id}
-                        className="flex cursor-pointer items-center justify-between gap-4 rounded-sm p-4 hover:bg-accent"
-                      >
-                        <div className="flex items-center gap-4">
-                          {!!image && (
-                            <Image
-                              src={image}
-                              alt={item.name || "Artist"}
-                              className="rounded-full object-cover"
-                              height={40}
-                              width={40}
-                            />
-                          )}
-                          <div>
-                            <h3 className="font-medium">{item.name}</h3>
-                            <div className="text-sm text-muted-foreground">
-                              {artists?.map((artist, idx) => (
-                                <span key={idx}>
-                                  <Link
-                                    href={`/artist/${item.id}`}
-                                    className="text-sm text-muted-foreground hover:underline"
-                                  >
-                                    {artist}
-                                  </Link>
-                                  {idx < artists.length - 1 ? ", " : ""}
-                                </span>
-                              ))}
-                              {!!artists && !!year && ` - ${year}`}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Button size="icon" variant="outline">
-                            <Star />
-                          </Button>
-                          <Button size="icon">
-                            <Play />
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  items?.map((item: any) => (
+                    <CardItem
+                      key={item.id}
+                      id={item.id}
+                      name={item.name}
+                      image={
+                        item.images?.[0]?.url || item.album?.images?.[0]?.url
+                      }
+                      artists={item.artists}
+                      release_date={item.release_date}
+                    />
+                  ))}
               </div>
             </ScrollArea>
           </div>

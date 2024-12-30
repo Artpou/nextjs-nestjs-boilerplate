@@ -13,7 +13,7 @@ import { Input, InputWrapper } from "@workspace/ui/components/input";
 import { signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 
-import SpotifyIcon from "@/components/icons/SpotifyIcon";
+import SpotifyIcon from "@/components/Icons/SpotifyIcon";
 
 const LoginSchema = z.object({
   email: z.string().email(),

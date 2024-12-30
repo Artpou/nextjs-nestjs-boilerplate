@@ -13,8 +13,9 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DrizzleModule } from './drizzle/drizzle.module';
 import { HttpExceptionFilter } from './http-exception.filter';
-import { ProviderService } from './provider/provider.service';
 import { SearchModule } from './search/search.module';
+import { SpotifyModule } from './spotify/spotify.module';
+import { ProviderModule } from './provider/provider.module';
 
 @Module({
   imports: [
@@ -54,6 +55,8 @@ import { SearchModule } from './search/search.module';
     UserModule,
     AuthModule,
     SearchModule,
+    SpotifyModule,
+    ProviderModule,
   ],
   providers: [
     {
@@ -64,7 +67,6 @@ import { SearchModule } from './search/search.module';
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
-    ProviderService,
   ],
 })
 export class AppModule {

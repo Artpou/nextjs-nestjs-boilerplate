@@ -1,10 +1,6 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import {
-  AlbumSchema,
-  ArtistSchema,
-  TrackSchema,
-} from 'src/spotify/spotify.dto';
+import { SearchResultsSchema } from 'src/spotify/spotify.dto';
 
 export class SearchQueryDto extends createZodDto(
   z.object({
@@ -13,8 +9,4 @@ export class SearchQueryDto extends createZodDto(
   }),
 ) {}
 
-export class SearchResponse extends createZodDto(
-  z.object({
-    items: z.array(z.union([AlbumSchema, TrackSchema, ArtistSchema])),
-  }),
-) {}
+export class SearchResponse extends createZodDto(SearchResultsSchema) {}

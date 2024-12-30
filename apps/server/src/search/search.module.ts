@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import { DrizzleModule } from 'src/drizzle/drizzle.module';
 import { ProviderService } from 'src/provider/provider.service';
-import { SpotifyService } from 'src/spotify/spotify.service';
+import { SpotifyModule } from 'src/spotify/spotify.module';
 
 import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
 
 @Module({
-  imports: [DrizzleModule],
+  imports: [DrizzleModule, SpotifyModule],
   controllers: [SearchController],
-  providers: [SearchService, SpotifyService, ProviderService],
+  providers: [SearchService, ProviderService],
 })
 export class SearchModule {}

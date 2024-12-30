@@ -53,7 +53,7 @@ export const config: NextAuthConfig = {
       authorization: {
         url: "https://accounts.spotify.com/authorize",
         params: {
-          scope: "user-read-email user-read-private",
+          scope: "user-read-email user-read-private user-top-read",
         },
       },
     }),

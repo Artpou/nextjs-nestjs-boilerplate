@@ -1,9 +1,40 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              ":PACKAGE:",
+              ":BLANK_LINE:",
+              ["@workspace/**"],
+              ":BLANK_LINE:",
+              ["@/**"],
+              ":BLANK_LINE:",
+              ["./**"]
+            ]
+          }
+        }
+      }
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "suspicious": {
+        "noConsole": "warn"
+      },
+      "correctness": {
+        "noUnusedVariables": "warn"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "warn"
+      },
+      "style": {
+        "useImportType": "error"
+      }
     }
   },
   "formatter": {
@@ -13,5 +44,8 @@
     "parser": {
       "unsafeParameterDecoratorsEnabled": true
     }
+  },
+  "files": {
+    "ignoreUnknown": false
   }
 }

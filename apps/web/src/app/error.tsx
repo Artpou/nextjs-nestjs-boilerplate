@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { Button } from "@workspace/ui/components/button";
+
 export default function Error({
   error,
   reset,
@@ -9,22 +11,24 @@ export default function Error({
   error: Error;
   reset: () => void;
 }) {
-  useEffect(() => {     
+  useEffect(() => {
     // eslint-disable-next-line no-console
     console.error(error);
   }, [error]);
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
+    <div className="flex flex-col gap-2">
+      {process.env.NODE_ENV === "development" ? (
+        <>
+          <span>{error.message}</span>
+          <span className="text-sm text-muted-foreground">{error.stack}</span>
+        </>
+      ) : (
+        <h2>Something went wrong!</h2>
+      )}
+      <Button className="w-fit" onClick={() => reset()}>
         Try again
-      </button>
+      </Button>
     </div>
   );
 }

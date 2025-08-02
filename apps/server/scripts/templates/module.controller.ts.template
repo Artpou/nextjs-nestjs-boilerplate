@@ -1,0 +1,60 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
+import { ApiTags, ApiOkResponse } from '@nestjs/swagger';
+
+import { {{className}}Entity, {{className}} } from './{{fileName}}.model';
+import { {{className}}Service } from './{{fileName}}.service';
+
+const {{fileName}} = new {{className}}Entity();
+
+@ApiTags('{{tableName}}')
+@Controller('{{tableName}}')
+export class {{className}}Controller {
+  constructor(private {{fileName}}Service: {{className}}Service) {}
+
+  @Get()
+  @ApiOkResponse({ type: [{{fileName}}.selectDto] })
+  async findAll(): Promise<{{className}}[]> {
+    return await this.{{fileName}}Service.findMany();
+  }
+
+  @Get(':id')
+  @ApiOkResponse({ type: {{fileName}}.selectDto })
+  async findById(@Param('id', ParseIntPipe) id: number): Promise<{{className}}> {
+    const {{fileName}} = await this.{{fileName}}Service.findById(id);
+    if (!{{fileName}}) {
+      throw new Error('{{className}} not found');
+    }
+    return {{fileName}};
+  }
+
+  @Post()
+  @ApiOkResponse({ type: {{fileName}}.selectDto })
+  async create(
+    @Body() create{{className}}Dto: typeof {{fileName}}.insertDto,
+  ): Promise<{{className}}> {
+    return await this.{{fileName}}Service.create(create{{className}}Dto);
+  }
+
+  @Put(':id')
+  @ApiOkResponse({ type: {{fileName}}.selectDto })
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() update{{className}}Dto: InstanceType<typeof {{fileName}}.updateDto>,
+  ) {
+    return await this.{{fileName}}Service.update(id, update{{className}}Dto);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.{{fileName}}Service.delete(id);
+  }
+} 

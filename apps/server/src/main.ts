@@ -1,15 +1,15 @@
 /* eslint-disable no-console */
 import { exec } from 'child_process';
 
-import { Logger } from 'nestjs-pino';
+import fastifyCookie from '@fastify/cookie';
+import helmet from '@fastify/helmet';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import fastifyCookie from '@fastify/cookie';
-import helmet from '@fastify/helmet';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { Logger } from 'nestjs-pino';
 import { patchNestJsSwagger } from 'nestjs-zod';
 
 import { AppModule } from './app.module';
@@ -23,10 +23,15 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
+    { logger: ['error', 'warn', 'debug', 'verbose'] },
   );
 
   await app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:3002',
+    ],
     credentials: true,
   });
 

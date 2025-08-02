@@ -1,0 +1,9 @@
+{
+  "extends": "@workspace/typescript-config/base",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "declarationDir": "./dist"
+  },
+  "include": ["src"]
+}

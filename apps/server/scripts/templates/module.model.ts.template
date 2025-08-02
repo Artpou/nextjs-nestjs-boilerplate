@@ -1,0 +1,20 @@
+import { pgTable } from 'drizzle-orm/pg-core';
+
+import {
+  Entity,
+  entityFields,
+  EntityResponse,
+} from '@/core/shared/model/entity.model';
+
+export const {{fileName}}Table = pgTable('{{tableName}}', {
+  ...entityFields,
+  // additional fields here
+});
+
+export class {{className}}Entity extends Entity<typeof {{fileName}}Table> {
+  constructor() {
+    super({{fileName}}Table);
+  }
+}
+
+export type {{className}} = EntityResponse<{{className}}Entity>; 

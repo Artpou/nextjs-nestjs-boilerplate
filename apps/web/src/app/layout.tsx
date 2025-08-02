@@ -1,13 +1,19 @@
-import "@repo/ui/globals.css";
+import "@workspace/ui/globals.css";
 
 import { Metadata, Viewport } from "next";
 import { SessionProvider } from "next-auth/react";
-import { cn } from "@repo/ui/lib/cn";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
-import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { cn } from "@workspace/ui/lib/utils";
+
 import { auth } from "@/auth";
-import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
+import { fontSans } from "@/config/fonts";
+import { siteConfig } from "@/config/site";
+import { APIProvider } from "@/providers/provider-api";
+import { ReactQueryProvider } from "@/providers/provider-react-query";
+import SidebarProvider from "@/providers/provider-sidebar";
 
 export const metadata: Metadata = {
   title: {
@@ -33,29 +39,28 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+  const locale = await getLocale();
+  const messages = await getMessages();
 
   return (
-    <html suppressHydrationWarning lang="en">
-      <head />
+    <html suppressHydrationWarning lang={locale}>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
-        )}
+        className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
-        <SessionProvider session={session} refetchOnWindowFocus={false}>
-          <ReactQueryProvider>
-            <div className="relative flex h-screen flex-col">
-              <main className="container mx-auto max-w-7xl grow px-6 pt-16">
-                {children}
-              </main>
-              <footer className="flex w-full items-center justify-center gap-1 py-3">
-                <span>Powered by</span>
-                <p className="text-primary">DaisyUI</p>
-              </footer>
-            </div>
-          </ReactQueryProvider>
-        </SessionProvider>
+        <NextIntlClientProvider messages={messages}>
+          <NuqsAdapter>
+            <SessionProvider session={session} refetchOnWindowFocus={false}>
+              <ReactQueryProvider>
+                <APIProvider>
+                  <SidebarProvider>{children}</SidebarProvider>
+                </APIProvider>
+              </ReactQueryProvider>
+            </SessionProvider>
+          </NuqsAdapter>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

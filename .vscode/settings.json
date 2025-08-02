@@ -1,4 +1,11 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "eslint.useFlatConfig": true
+    "workbench.colorCustomizations": {
+        "editor.findMatchBackground": "#ffffff5b",
+        "editorGutter.modifiedBackground": "#ffc777",
+        "editor.lineHighlightBackground": "#1073cf2d",
+        "editor.lineHighlightBorder": "#9fced11f",
+        "activityBar.background": "#3A2B14",
+        "titleBar.activeBackground": "#523C1C",
+        "titleBar.activeForeground": "#FDFBF9"
+    }
 }

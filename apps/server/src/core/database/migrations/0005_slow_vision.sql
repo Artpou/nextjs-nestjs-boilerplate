@@ -1,0 +1,1 @@
+ALTER TABLE "users" ALTER COLUMN "company_id" SET DATA TYPE uuid;

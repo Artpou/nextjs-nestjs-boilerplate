@@ -1,0 +1,62 @@
+import { Injectable } from '@nestjs/common';
+import { eq } from 'drizzle-orm';
+
+import { Tx } from '../../core/database/drizzle/drizzle.module';
+import {
+  EntityInsert,
+  EntityUpdate,
+} from '../../core/shared/model/entity.model';
+import { EntityService } from '../../core/shared/service/entity.service';
+
+import { {{className}}, {{className}}Entity } from './{{fileName}}.model';
+
+@Injectable()
+export class {{className}}Service extends EntityService<{{className}}Entity> {
+  protected entity = new {{className}}Entity();
+
+  async findMany() {
+    return await this.db.query.{{tableName}}.findMany();
+  }
+
+  async findById(id:string): Promise<{{className}} | undefined> {
+    return await this.db.query.{{tableName}}.findFirst({
+      where: eq(this.table.id, id),
+    });
+  }
+
+  async exist(id: string): Promise<boolean> {
+    const {{fileName}} = await this.db.query.{{tableName}}.findFirst({
+      columns: { id: true },
+      where: eq(this.table.id, id),
+    });
+
+    return !!{{fileName}};
+  }
+
+  async create(insert: EntityInsert<{{className}}Entity>, tx?: Tx): Promise<{{className}}> {
+    const [{{fileName}}] = await (tx ?? this.db)
+      .insert(this.table)
+      .values(insert)
+      .returning();
+    if (!{{fileName}}) throw new Error('{{className}} not created');
+    return {{fileName}};
+  }
+
+  async update(
+    id: string,
+    update: EntityUpdate<{{className}}Entity>,
+    tx?: Tx,
+  ): Promise<{{className}}> {
+    const [{{fileName}}] = await (tx ?? this.db)
+      .update(this.table)
+      .set(update)
+      .where(eq(this.table.id, id))
+      .returning();
+    if (!{{fileName}}) throw new Error('{{className}} not updated');
+    return {{fileName}};
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.db.delete(this.table).where(eq(this.table.id, id));
+  }
+} 

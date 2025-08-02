@@ -1,35 +1,52 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
-import LogoutButton from "../components/ButtonLogout";
+import { Button } from "@workspace/ui/components/button";
 
 import { auth } from "@/auth";
-import { GET } from "@/app/api/client";
+import { getAPI } from "@/lib/api";
 
-export default async function Home() {
+interface HomeProps {
+  searchParams: {
+    feed?: string;
+    sidebar?: string;
+  };
+}
+
+export default async function Home({ searchParams }: HomeProps) {
   const session = await auth();
+  const t = await getTranslations("common");
 
+  const { GET } = getAPI();
   const { data } = await GET("/auth/me");
-  // eslint-disable-next-line no-console
-  console.log("🚀 ~ me :", data);
+  console.log("🚀 ~ Home ~ data:", data);
+
+  if (!session) {
+    return (
+      <section className="flex flex-col items-center justify-center gap-4">
+        <div className="flex flex-col gap-4">
+          <Button variant="secondary" asChild>
+            <Link href="/login">{t("login")}</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/signup">{t("signup")}</Link>
+          </Button>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="flex flex-col items-center justify-center gap-4">
-      {session?.user ? (
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-2xl">Welcome {session.user.name}!</h1>
-          <p>Email: {session.user.email}</p>
-          <LogoutButton />
-        </div>
-      ) : (
-        <div className="flex gap-4">
-          <Link className="btn btn-primary" href="/login">
-            Login
-          </Link>
-          <Link className="btn" href="/signup">
-            Sign Up
-          </Link>
-        </div>
-      )}
-    </section>
+    <div className="flex size-full gap-4 p-6">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl font-bold">Site name</h1>
+        <p className="text-muted-foreground">
+          This is a test page. You can view company information below.
+        </p>
+        <Button asChild>
+          <Link href="/company/1">View Company (ID: 1)</Link>
+        </Button>
+      </div>
+    </div>
   );
 }

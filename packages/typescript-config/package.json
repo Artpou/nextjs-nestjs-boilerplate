@@ -1,12 +1,13 @@
 {
-  "name": "@repo/typescript-config",
-  "version": "0.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "files": [
-    "./base.json",
-    "./nestjs.json",
-    "./nextjs.json",
-    "./react-library.json"
-  ]
+  "name": "@workspace/typescript-config",
+  "type": "module",
+  "exports": {
+    "./base": "./base.js",
+    "./next": "./next.js",
+    "./react": "./react.js",
+    "./nest": "./nest.js"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
 }

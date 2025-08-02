@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { createContext, useEffect } from "react";
+import { createContext, useEffect } from 'react';
 
-import { getSession } from "next-auth/react";
-import createClient from "openapi-fetch";
+import { getSession } from 'next-auth/react';
+import type createClient from 'openapi-fetch';
 
-import { paths } from "@workspace/openapi";
+import type { paths } from '@workspace/openapi';
 
-import { authMiddleware, client, Middleware } from "@/lib/api";
+import { authMiddleware, client, type Middleware } from '@/lib/api';
 
 export type APIContextType = ReturnType<typeof createClient<paths>>;
 

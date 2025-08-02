@@ -1,18 +1,18 @@
-import bundleAnalyzer from "@next/bundle-analyzer";
-import createNextIntlPlugin from "next-intl/plugin";
+import bundleAnalyzer from '@next/bundle-analyzer';
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin();
 
 const withBundleAnalyzer = bundleAnalyzer({
-  enabled: import.meta.env?.ANALYZE === "true",
+  enabled: import.meta.env?.ANALYZE === 'true',
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  transpilePackages: ["@workspace/ui"],
+  transpilePackages: ['@workspace/ui'],
   logging: {
-    debug: import.meta.env?.NODE_ENV === "development",
+    debug: import.meta.env?.NODE_ENV === 'development',
     fetches: {
       fullUrl: true,
       hmrRefreshes: true,
@@ -21,8 +21,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "i.scdn.co",
+        protocol: 'https',
+        hostname: 'i.scdn.co',
       },
     ],
   },

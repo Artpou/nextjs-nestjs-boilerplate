@@ -1,19 +1,19 @@
-import { Home, UserRound } from "lucide-react";
+import { Home, UserRound } from 'lucide-react';
 
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Site name",
-  description: "",
+  name: 'Site name',
+  description: '',
   navItems: [
     {
-      label: "home",
-      href: "/",
+      label: 'home',
+      href: '/',
       icon: Home,
     },
     {
-      label: "profile",
-      href: "/profile",
+      label: 'profile',
+      href: '/profile',
       icon: UserRound,
     },
   ],

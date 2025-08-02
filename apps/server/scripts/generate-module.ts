@@ -1,12 +1,12 @@
 #!/usr/bin/env tsx
-/* eslint-disable no-console */
-import { execSync } from 'child_process';
-import { writeFileSync, readFileSync } from 'fs';
-import { join } from 'path';
+/** biome-ignore-all lint/suspicious/noConsole: need generate-module logs */
+import { execSync } from 'node:child_process';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 import {
-  processTemplate,
   getTemplatePath,
+  processTemplate,
   TemplateVariables,
 } from './utils/template-processor';
 
@@ -23,7 +23,7 @@ const className = name
   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
   .join('');
 const fileName = name;
-const tableName = fileName + 's';
+const tableName = `${fileName}s`;
 
 const variables: TemplateVariables = {
   fileName,

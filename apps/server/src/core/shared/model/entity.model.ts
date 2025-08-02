@@ -1,6 +1,5 @@
 import { InferSelectModel } from 'drizzle-orm';
-import { PgColumn, uuid } from 'drizzle-orm/pg-core';
-import { timestamp, PgTable } from 'drizzle-orm/pg-core';
+import { PgColumn, PgTable, timestamp, uuid } from 'drizzle-orm/pg-core';
 import {
   createInsertSchema,
   createSelectSchema,

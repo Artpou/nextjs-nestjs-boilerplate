@@ -1,19 +1,20 @@
-import "@workspace/ui/globals.css";
+import '@workspace/ui/globals.css';
 
-import { Metadata, Viewport } from "next";
-import { SessionProvider } from "next-auth/react";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
+import type { Metadata, Viewport } from 'next';
 
-import { cn } from "@workspace/ui/lib/utils";
+import { SessionProvider } from 'next-auth/react';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
-import { auth } from "@/auth";
-import { fontSans } from "@/config/fonts";
-import { siteConfig } from "@/config/site";
-import { APIProvider } from "@/providers/provider-api";
-import { ReactQueryProvider } from "@/providers/provider-react-query";
-import SidebarProvider from "@/providers/provider-sidebar";
+import { cn } from '@workspace/ui/lib/utils';
+
+import { auth } from '@/auth';
+import { fontSans } from '@/config/fonts';
+import { siteConfig } from '@/config/site';
+import { APIProvider } from '@/providers/provider-api';
+import { ReactQueryProvider } from '@/providers/provider-react-query';
+import SidebarProvider from '@/providers/provider-sidebar';
 
 export const metadata: Metadata = {
   title: {
@@ -22,14 +23,14 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "/favicon.ico",
+    icon: '/favicon.ico',
   },
 };
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
   ],
 };
 
@@ -48,7 +49,7 @@ export default async function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body
-        className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
+        className={cn('min-h-screen font-sans antialiased', fontSans.variable)}
       >
         <NextIntlClientProvider messages={messages}>
           <NuqsAdapter>

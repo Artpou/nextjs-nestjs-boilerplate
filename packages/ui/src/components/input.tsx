@@ -32,6 +32,7 @@ const InputWrapper = React.forwardRef<HTMLDivElement, InputWrapperProps>(
       ref={ref}
       {...props}
     >
+      {/** biome-ignore lint/a11y/noLabelWithoutControl: shadcn specific */}
       {label && <label className="text-sm">{label}</label>}
       {children}
       {error && (

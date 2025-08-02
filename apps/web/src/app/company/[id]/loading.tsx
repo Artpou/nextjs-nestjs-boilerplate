@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader } from "@workspace/ui/components/card";
-import { Skeleton } from "@workspace/ui/components/skeleton";
+import { Card, CardContent, CardHeader } from '@workspace/ui/components/card';
+import { Skeleton } from '@workspace/ui/components/skeleton';
 
 const CompanyLoading = () => {
   return (
@@ -27,8 +27,8 @@ const CompanyLoading = () => {
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="flex items-center gap-3">
+            {Array.from({ length: 4 }).map(() => (
+              <div className="flex items-center gap-3">
                 <Skeleton className="size-4" />
                 <div className="flex-1">
                   <Skeleton className="mb-1 h-4 w-16" />

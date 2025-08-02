@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { hash } from 'bcrypt';
 import { eq } from 'drizzle-orm';
-
-import { EntityService } from '@/core/shared/service/entity.service';
-
 import { Tx } from '../../core/database/drizzle/drizzle.module';
 import { EntityInsert } from '../../core/shared/model/entity.model';
+
+import { EntityService } from '@/core/shared/service/entity.service';
 
 import { User, UserEntity } from './user.model';
 @Injectable()

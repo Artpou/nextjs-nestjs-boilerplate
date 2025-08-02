@@ -1,4 +1,4 @@
-import { paths } from "@workspace/openapi";
+import { paths } from '@workspace/openapi';
 
 // Generic type to get response type for any API endpoint
 export type ApiResponse<
@@ -8,7 +8,7 @@ export type ApiResponse<
   responses: {
     200: {
       content: {
-        "application/json": infer R;
+        'application/json': infer R;
       };
     };
   };
@@ -16,5 +16,5 @@ export type ApiResponse<
   ? R
   : never;
 
-export type IReview = ApiResponse<"/reviews", "get">[0];
-export type IAlbum = ApiResponse<"/albums/{id}", "get">;
+export type IReview = ApiResponse<'/reviews', 'get'>[0];
+export type IAlbum = ApiResponse<'/albums/{id}', 'get'>;

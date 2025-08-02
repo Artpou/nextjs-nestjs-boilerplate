@@ -1,25 +1,24 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { Building2, Globe, Mail, MapPin, Phone } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useParams } from 'next/navigation';
 
-import { Badge } from "@workspace/ui/components/badge";
-import { Button } from "@workspace/ui/components/button";
+import { useQuery } from '@tanstack/react-query';
+import { Building2, Globe, Mail, MapPin, Phone } from 'lucide-react';
+
+import { Badge } from '@workspace/ui/components/badge';
+import { Button } from '@workspace/ui/components/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@workspace/ui/components/card";
-import { Separator } from "@workspace/ui/components/separator";
+} from '@workspace/ui/components/card';
+import { Separator } from '@workspace/ui/components/separator';
 
-import { useAPI } from "@/hooks/useAPI";
+import { useAPI } from '@/hooks/useAPI';
 
 const CompanyPage = () => {
-  const t = useTranslations();
   const params = useParams();
   const api = useAPI();
   const companyId = String(params.id);
@@ -29,13 +28,13 @@ const CompanyPage = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["company", companyId],
+    queryKey: ['company', companyId],
     queryFn: async () => {
-      const { data, error } = await api.GET("/companies/{id}", {
+      const { data, error } = await api.GET('/companies/{id}', {
         params: { path: { id: companyId } },
       });
 
-      if (error) throw new Error("Failed to fetch company");
+      if (error) throw new Error('Failed to fetch company');
 
       return data;
     },
@@ -43,9 +42,9 @@ const CompanyPage = () => {
   });
 
   useQuery({
-    queryKey: ["company2", companyId],
+    queryKey: ['company2', companyId],
     queryFn: async () => {
-      await api.GET("/companies/{id}", {
+      await api.GET('/companies/{id}', {
         params: { path: { id: companyId } },
       });
     },
@@ -179,11 +178,11 @@ const CompanyPage = () => {
 
           <div className="flex items-center gap-2">
             <Badge variant="secondary">
-              Created:{" "}
+              Created:{' '}
               {new Date(company.createdAt as string).toLocaleDateString()}
             </Badge>
             <Badge variant="outline">
-              Updated:{" "}
+              Updated:{' '}
               {new Date(company.updatedAt as string).toLocaleDateString()}
             </Badge>
           </div>

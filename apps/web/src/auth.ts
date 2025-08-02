@@ -1,10 +1,10 @@
-import type { NextAuthConfig, Session } from "next-auth";
-import NextAuth from "next-auth";
-import { JWT } from "next-auth/jwt";
-import Credentials from "next-auth/providers/credentials";
-import createClient from "openapi-fetch";
+import type { NextAuthConfig, Session } from 'next-auth';
+import NextAuth from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
+import Credentials from 'next-auth/providers/credentials';
+import createClient from 'openapi-fetch';
 
-import { paths } from "@workspace/openapi";
+import type { paths } from '@workspace/openapi';
 
 const client = createClient<paths>({
   baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL,
@@ -16,11 +16,11 @@ export const config: NextAuthConfig = {
   providers: [
     Credentials({
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials): Promise<JWT> {
-        const { data, error } = await client.POST("/auth/login", {
+        const { data, error } = await client.POST('/auth/login', {
           body: {
             email: credentials.email as string,
             password: credentials.password as string,
@@ -28,7 +28,7 @@ export const config: NextAuthConfig = {
         });
 
         if (error) {
-          throw new Error(error || "Failed to authenticate");
+          throw new Error(error || 'Failed to authenticate');
         }
 
         return data;
@@ -63,7 +63,7 @@ export const config: NextAuthConfig = {
 
       isRefreshing = true;
 
-      const { data, error } = await client.POST("/auth/refresh", {
+      const { data, error } = await client.POST('/auth/refresh', {
         body: {
           refresh: credentialToken?.refresh_token,
         },
@@ -84,9 +84,9 @@ export const config: NextAuthConfig = {
     },
   },
   pages: {
-    signIn: "/login",
-    newUser: "/signup",
-    error: "/",
+    signIn: '/login',
+    newUser: '/signup',
+    error: '/',
   },
   secret: process.env.AUTH_SECRET,
   trustHost: true,

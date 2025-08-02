@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
-// @/seed/main.ts
+/** biome-ignore-all lint/suspicious/noConsole: need seed logs */
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,

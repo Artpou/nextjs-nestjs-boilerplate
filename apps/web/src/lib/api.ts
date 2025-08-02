@@ -1,9 +1,9 @@
-import { Session } from "next-auth";
-import createClient, { Middleware } from "openapi-fetch";
+import type { Session } from 'next-auth';
+import createClient, { type Middleware } from 'openapi-fetch';
 
-import { paths } from "@workspace/openapi";
+import type { paths } from '@workspace/openapi';
 
-import { auth } from "@/auth";
+import { auth } from '@/auth';
 
 export type { Middleware };
 
@@ -11,11 +11,11 @@ export const authMiddleware = (
   getSession: () => Promise<Session | null>,
 ): Middleware => ({
   async onRequest({ request }) {
-    const { expires } = (await auth()) || {};
+    (await auth()) || {};
 
     const session = await getSession();
     if (session) {
-      request.headers.set("Authorization", `Bearer ${session.access_token}`);
+      request.headers.set('Authorization', `Bearer ${session.access_token}`);
     }
   },
 });

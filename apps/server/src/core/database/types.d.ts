@@ -18,6 +18,6 @@ type QueryConfig<TableName extends keyof TSchema> = DBQueryConfig<
 
 export type Model<
   TableName extends keyof TSchema,
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  // biome-ignore lint/complexity/noBannedTypes: need empty object type
   QBConfig extends Exact<QueryConfig<TableName>, QBConfig> = {},
 > = BuildQueryResult<TSchema, TSchema[TableName], QBConfig>;

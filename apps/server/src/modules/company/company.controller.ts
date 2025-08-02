@@ -1,17 +1,16 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
+  Param,
+  ParseUUIDPipe,
   Post,
   Put,
-  Delete,
-  Body,
-  Param,
-  ParseIntPipe,
-  ParseUUIDPipe,
 } from '@nestjs/common';
-import { ApiTags, ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-import { CompanyEntity, Company } from './company.model';
+import { Company, CompanyEntity } from './company.model';
 import { CompanyService } from './company.service';
 
 const company = new CompanyEntity();

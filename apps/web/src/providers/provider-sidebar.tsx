@@ -1,7 +1,7 @@
-import { SidebarProvider } from "@workspace/ui/components/sidebar";
+import { SidebarProvider } from '@workspace/ui/components/sidebar';
 
-import { AppSidebar } from "@/components/app/app-sidebar";
-import { AppTopbar } from "@/components/app/app-topbar";
+import { AppSidebar } from '@/components/app/app-sidebar';
+import { AppTopbar } from '@/components/app/app-topbar';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

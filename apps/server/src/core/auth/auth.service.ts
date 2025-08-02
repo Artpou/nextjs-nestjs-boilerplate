@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { compare, hash } from 'bcrypt';
+import { compare } from 'bcrypt';
 import { jwtDecode } from 'jwt-decode';
+import { User } from '../../modules/user/user.model';
 
 import {
   LoginBody,
@@ -10,8 +11,6 @@ import {
 } from '@workspace/request/auth.request';
 
 import { UserService } from '@/modules/user/user.service';
-
-import { User } from '../../modules/user/user.model';
 
 import { TokenResponse } from './auth.schema';
 

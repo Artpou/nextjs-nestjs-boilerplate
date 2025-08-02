@@ -1,20 +1,25 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import { RegisterBody, RegisterSchema } from "@workspace/request/auth.request";
-import { Alert, AlertTitle } from "@workspace/ui/components/alert";
-import { Button } from "@workspace/ui/components/button";
-import { Card } from "@workspace/ui/components/card";
-import { Input, InputWrapper } from "@workspace/ui/components/input";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { signIn } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
 
-import useAPI from "@/hooks/useAPI";
+import {
+  type RegisterBody,
+  RegisterSchema,
+} from '@workspace/request/auth.request';
+
+import { Alert, AlertTitle } from '@workspace/ui/components/alert';
+import { Button } from '@workspace/ui/components/button';
+import { Card } from '@workspace/ui/components/card';
+import { Input, InputWrapper } from '@workspace/ui/components/input';
+
+import useAPI from '@/hooks/useAPI';
 
 const SignupPage = () => {
   const router = useRouter();
@@ -32,24 +37,24 @@ const SignupPage = () => {
 
   const { mutate: signup, isPending } = useMutation({
     mutationFn: async (data: RegisterBody) => {
-      const { error } = await POST("/auth/register", {
+      const { error } = await POST('/auth/register', {
         body: data,
       });
 
       if (error) throw error;
 
-      const signInResult = await signIn("credentials", {
+      const signInResult = await signIn('credentials', {
         ...data,
         redirect: false,
       });
       if (signInResult?.error) throw signInResult.error;
     },
     onSuccess: () => {
-      router.push("/");
+      router.push('/');
       router.refresh();
     },
     onError: (error) => {
-      setError("root", { message: error.message });
+      setError('root', { message: error.message });
     },
   });
 
@@ -71,24 +76,24 @@ const SignupPage = () => {
           )}
           <InputWrapper
             className="w-full"
-            label={t("auth.email")}
+            label={t('auth.email')}
             error={errors.email?.message}
           >
-            <Input type="email" {...register("email")} />
+            <Input type="email" {...register('email')} />
           </InputWrapper>
           <InputWrapper
             className="w-full"
-            label={t("auth.password")}
+            label={t('auth.password')}
             error={errors.password?.message}
           >
-            <Input type="password" {...register("password")} />
+            <Input type="password" {...register('password')} />
           </InputWrapper>
           <div className="flex items-center justify-center gap-4">
             <Button variant="secondary" asChild>
-              <Link href="/">{t("common.cancel")}</Link>
+              <Link href="/">{t('common.cancel')}</Link>
             </Button>
             <Button type="submit" isLoading={isPending}>
-              {t("common.signup")}
+              {t('common.signup')}
             </Button>
           </div>
         </form>

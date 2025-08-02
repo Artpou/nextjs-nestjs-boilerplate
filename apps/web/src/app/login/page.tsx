@@ -1,18 +1,20 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { useTranslations } from "next-intl";
-import { useForm } from "react-hook-form";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import { LoginBody, LoginSchema } from "@workspace/request/auth.request";
-import { Alert, AlertTitle } from "@workspace/ui/components/alert";
-import { Button } from "@workspace/ui/components/button";
-import { Card } from "@workspace/ui/components/card";
-import { Input, InputWrapper } from "@workspace/ui/components/input";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { signIn } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+
+import { type LoginBody, LoginSchema } from '@workspace/request/auth.request';
+
+import { Alert, AlertTitle } from '@workspace/ui/components/alert';
+import { Button } from '@workspace/ui/components/button';
+import { Card } from '@workspace/ui/components/card';
+import { Input, InputWrapper } from '@workspace/ui/components/input';
 
 const LoginPage = () => {
   const t = useTranslations();
@@ -29,7 +31,7 @@ const LoginPage = () => {
 
   const { mutate: login, isPending } = useMutation({
     mutationFn: async (data: LoginBody) => {
-      const response = await signIn("credentials", {
+      const response = await signIn('credentials', {
         email: data.email,
         password: data.password,
         redirect: false,
@@ -38,11 +40,11 @@ const LoginPage = () => {
       if (response?.error) throw new Error();
     },
     onSuccess: () => {
-      router.push("/");
+      router.push('/');
       router.refresh();
     },
     onError: () => {
-      setError("root", { message: "Invalid email or password" });
+      setError('root', { message: 'Invalid email or password' });
     },
   });
 
@@ -65,21 +67,21 @@ const LoginPage = () => {
             label="Email"
             error={errors.email?.message}
           >
-            <Input type="email" {...register("email")} />
+            <Input type="email" {...register('email')} />
           </InputWrapper>
           <InputWrapper
             className="w-full"
             label="Password"
             error={errors.password?.message}
           >
-            <Input type="password" {...register("password")} />
+            <Input type="password" {...register('password')} />
           </InputWrapper>
           <div className="flex items-center justify-center gap-4">
             <Button variant="secondary" asChild>
-              <Link href="/">{t("common.cancel")}</Link>
+              <Link href="/">{t('common.cancel')}</Link>
             </Button>
             <Button type="submit" isLoading={isPending}>
-              {t("common.signIn")}
+              {t('common.signIn')}
             </Button>
           </div>
         </form>

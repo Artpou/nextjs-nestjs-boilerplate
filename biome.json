@@ -1,4 +1,9 @@
 {
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "assist": {
     "actions": {
       "source": {
@@ -6,9 +11,15 @@
           "level": "on",
           "options": {
             "groups": [
-              ":PACKAGE:",
+              ":NODE:",
               ":BLANK_LINE:",
-              ["@workspace/**"],
+              ["react", "react/**", "next", "next/**"],
+              ":BLANK_LINE:",
+              ["**", "!@workspace/**", "!@/**", "!./**"],
+              ":BLANK_LINE:",
+              ["@workspace/**", "!@workspace/ui/**"],
+              ":BLANK_LINE:",
+              ["@workspace/ui/**"],
               ":BLANK_LINE:",
               ["@/**"],
               ":BLANK_LINE:",
@@ -30,22 +41,30 @@
         "noUnusedVariables": "warn"
       },
       "complexity": {
-        "noExcessiveCognitiveComplexity": "warn"
+        "noExcessiveCognitiveComplexity": "warn",
+        "noUselessConstructor": "off"
       },
       "style": {
-        "useImportType": "error"
+        "useImportType": "off"
       }
     }
   },
   "formatter": {
-    "enabled": true
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80
   },
   "javascript": {
     "parser": {
       "unsafeParameterDecoratorsEnabled": true
+    },
+    "formatter": {
+      "quoteStyle": "single"
     }
   },
   "files": {
-    "ignoreUnknown": false
+    "ignoreUnknown": false,
+    "experimentalScannerIgnores": ["dist/**", "node_modules/**", ".next/**"]
   }
 }

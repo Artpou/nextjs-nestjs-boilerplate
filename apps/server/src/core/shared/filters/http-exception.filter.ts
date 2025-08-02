@@ -1,9 +1,9 @@
 import {
-  Logger,
-  Catch,
   ArgumentsHost,
-  HttpException,
+  Catch,
   ConflictException,
+  HttpException,
+  Logger,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { ZodValidationException } from 'nestjs-zod';

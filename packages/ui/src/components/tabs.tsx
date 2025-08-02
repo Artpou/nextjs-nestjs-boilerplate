@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 
 import { cn } from "@workspace/ui/lib/utils";
 
-
 const Tabs = TabsPrimitive.Root;
 
 const TabsContext = React.createContext<{ value?: string; id: string }>({

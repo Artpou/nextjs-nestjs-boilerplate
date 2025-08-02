@@ -1,8 +1,8 @@
-/* eslint-disable no-console */
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
+/** biome-ignore-all lint/suspicious/noConsole: need reset logs */
 import * as dotenv from 'dotenv';
 import { sql } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 
 dotenv.config();
 

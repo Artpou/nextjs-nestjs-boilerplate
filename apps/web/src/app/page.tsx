@@ -1,35 +1,37 @@
-import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import Link from 'next/link';
 
-import { Button } from "@workspace/ui/components/button";
+import { getTranslations } from 'next-intl/server';
 
-import { auth } from "@/auth";
-import { getAPI } from "@/lib/api";
+import { Button } from '@workspace/ui/components/button';
 
-interface HomeProps {
-  searchParams: {
-    feed?: string;
-    sidebar?: string;
-  };
-}
+import { auth } from '@/auth';
+import { getAPI } from '@/lib/api';
 
-export default async function Home({ searchParams }: HomeProps) {
+// interface HomeProps {
+//   searchParams: {
+//     feed?: string;
+//     sidebar?: string;
+//   };
+// }
+
+export default async function Home() {
   const session = await auth();
-  const t = await getTranslations("common");
+  const t = await getTranslations('common');
 
   const { GET } = getAPI();
-  const { data } = await GET("/auth/me");
-  console.log("🚀 ~ Home ~ data:", data);
+  const { data } = await GET('/auth/me');
+  // biome-ignore lint/suspicious/noConsole: log
+  console.log('🚀 ~ Home ~ data:', data);
 
   if (!session) {
     return (
       <section className="flex flex-col items-center justify-center gap-4">
         <div className="flex flex-col gap-4">
           <Button variant="secondary" asChild>
-            <Link href="/login">{t("login")}</Link>
+            <Link href="/login">{t('login')}</Link>
           </Button>
           <Button asChild>
-            <Link href="/signup">{t("signup")}</Link>
+            <Link href="/signup">{t('signup')}</Link>
           </Button>
         </div>
       </section>

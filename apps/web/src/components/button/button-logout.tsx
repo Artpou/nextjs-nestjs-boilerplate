@@ -1,34 +1,30 @@
-"use client";
+'use client';
 
-import { LogOut } from "lucide-react";
-import { signOut } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { LogOut } from 'lucide-react';
+import { signOut } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 
-import { Button } from "@workspace/ui/components/button";
+import { Button } from '@workspace/ui/components/button';
 
 export default function LogoutButton({
   collapsed = false,
 }: {
   collapsed?: boolean;
 }) {
-  const t = useTranslations("common");
-
-  const handleSignOut = () => {
-    console.log("Starting signout...");
-
-    // Use NextAuth's default signOut method
-    signOut({
-      callbackUrl: "/",
-      redirect: true,
-    }).catch((error) => {
-      console.error("Signout error:", error);
-    });
-  };
+  const t = useTranslations('common');
 
   return (
-    <Button variant="destructive" onClick={handleSignOut}>
+    <Button
+      variant="destructive"
+      onClick={() =>
+        signOut({
+          callbackUrl: '/',
+          redirect: true,
+        })
+      }
+    >
       <LogOut className="size-4" />
-      {!collapsed && <span className="truncate">{t("logout")}</span>}
+      {!collapsed && <span className="truncate">{t('logout')}</span>}
     </Button>
   );
 }

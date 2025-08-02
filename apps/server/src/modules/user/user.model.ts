@@ -1,13 +1,12 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, varchar, text, uuid } from 'drizzle-orm/pg-core';
+import { pgTable, text, uuid, varchar } from 'drizzle-orm/pg-core';
+import { companies } from '../company/company.model';
 
 import {
-  entityFields,
   Entity,
   EntityResponse,
+  entityFields,
 } from '@/core/shared/model/entity.model';
-
-import { companies } from '../company/company.model';
 
 export const users = pgTable('users', {
   ...entityFields,

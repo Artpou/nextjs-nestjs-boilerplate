@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { Slot } from "@radix-ui/react-slot";
-import { VariantProps, cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
 
 import { Button } from "@workspace/ui/components/button";
@@ -85,6 +85,7 @@ const SidebarProvider = React.forwardRef<
         }
 
         // This sets the cookie to keep the sidebar state.
+        // biome-ignore lint/suspicious/noDocumentCookie: shadcn specific
         document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
       },
       [setOpenProp, open],
@@ -223,6 +224,7 @@ const Sidebar = React.forwardRef<
     }
 
     return (
+      // biome-ignore lint/a11y/noStaticElementInteractions: shadcn specific
       <div
         ref={ref}
         className="group peer hidden text-sidebar-foreground md:block"

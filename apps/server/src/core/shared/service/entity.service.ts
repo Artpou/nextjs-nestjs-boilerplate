@@ -1,10 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
-
-import { DRIZZLE } from '@/core/database/drizzle/drizzle.module';
-
 import type { DrizzleDB } from '../../database/drizzle/types/drizzle';
 import { Entity } from '../model/entity.model';
+
+import { DRIZZLE } from '@/core/database/drizzle/drizzle.module';
 
 @Injectable()
 export abstract class EntityService<E extends Entity> {

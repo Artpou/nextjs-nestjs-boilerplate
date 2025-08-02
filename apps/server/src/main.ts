@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
-import { exec } from 'child_process';
+/** biome-ignore-all lint/suspicious/noConsole: need main logs */
+import { exec } from 'node:child_process';
 
 import fastifyCookie from '@fastify/cookie';
 import helmet from '@fastify/helmet';
@@ -8,7 +8,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { patchNestJsSwagger } from 'nestjs-zod';
 

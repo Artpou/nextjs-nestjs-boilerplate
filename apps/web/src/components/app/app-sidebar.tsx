@@ -1,8 +1,10 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { useTranslations } from 'next-intl';
+import LogoutButton from '../button/button-logout';
 
 import {
   Sidebar,
@@ -13,19 +15,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@workspace/ui/components/sidebar";
+} from '@workspace/ui/components/sidebar';
 
-import { siteConfig } from "@/config/site";
-
-import LogoutButton from "../button/button-logout";
+import { siteConfig } from '@/config/site';
 
 export function AppSidebar() {
   const pathname = usePathname();
   const { open } = useSidebar();
-  const t = useTranslations("sidebar");
+  const t = useTranslations('sidebar');
 
   const items = siteConfig.navItems.map((item) => ({
     ...item,
+    // biome-ignore lint/suspicious/noExplicitAny: need any type
     title: t(item.label as any),
   }));
 

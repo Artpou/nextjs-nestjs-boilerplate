@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { parseAsString, useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from 'nuqs';
 
-import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs";
+import { Tabs, TabsList, TabsTrigger } from '@workspace/ui/components/tabs';
 
 export const ReviewTabs = () => {
   const [feed, setFeed] = useQueryState(
-    "feed",
-    parseAsString.withOptions({ shallow: false }).withDefault("trending"),
+    'feed',
+    parseAsString.withOptions({ shallow: false }).withDefault('trending'),
   );
 
   return (
@@ -29,8 +29,8 @@ export const ReviewTabs = () => {
 
 export const SidebarTabs = () => {
   const [feed, setFeed] = useQueryState(
-    "sidebar",
-    parseAsString.withOptions({ shallow: false }).withDefault("trending"),
+    'sidebar',
+    parseAsString.withOptions({ shallow: false }).withDefault('trending'),
   );
 
   return (

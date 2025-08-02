@@ -15,7 +15,6 @@ import {
   useSidebar,
 } from "@workspace/ui/components/sidebar";
 
-
 import { siteConfig } from "@/config/site";
 
 import LogoutButton from "../button/button-logout";
@@ -27,7 +26,6 @@ export function AppSidebar() {
 
   const items = siteConfig.navItems.map((item) => ({
     ...item,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     title: t(item.label as any),
   }));
 

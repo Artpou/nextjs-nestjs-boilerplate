@@ -5,11 +5,9 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
-    "lint": {
-      "outputs": []
-    },
+    "lint": {},
     "lint:fix": {
-      "outputs": []
+      "cache": false
     },
     "dev": {
       "dependsOn": ["^build"],
@@ -36,8 +34,6 @@
     "REDIS_URL",
     "ANALYZE",
     "AUTH_SECRET",
-    "SPOTIFY_CLIENT_ID",
-    "SPOTIFY_CLIENT_SECRET",
     "DATABASE_URL"
   ]
 }

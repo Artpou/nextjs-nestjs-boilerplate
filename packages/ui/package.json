@@ -11,8 +11,8 @@
     "./hooks/*": "./src/hooks/*.ts"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 50",
-    "lint:fix": "eslint . --max-warnings 50 --fix"
+    "lint": "biome check",
+    "lint:fix": "biome check --write"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
@@ -38,7 +38,6 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "@turbo/gen": "^2.2.3",
     "@types/node": "catalog:",

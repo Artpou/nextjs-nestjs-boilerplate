@@ -18,9 +18,6 @@ const nextConfig = {
       hmrRefreshes: true,
     },
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   images: {
     remotePatterns: [
       {

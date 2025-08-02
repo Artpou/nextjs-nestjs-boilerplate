@@ -12,7 +12,6 @@
     "openapi-typescript": "^7.4.4"
   },
   "devDependencies": {
-    "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*"
   }
 }

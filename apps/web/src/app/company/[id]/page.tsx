@@ -3,7 +3,6 @@
 import { notFound, useParams } from 'next/navigation';
 
 import { Building2, Globe, Mail, MapPin, Phone } from 'lucide-react';
-import { openapiQuery } from '../../../lib/api';
 
 import { Button } from '@workspace/ui/components/button';
 import {
@@ -16,6 +15,7 @@ import { Separator } from '@workspace/ui/components/separator';
 import { Skeleton } from '@workspace/ui/components/skeleton';
 
 import { ContactInfo } from '@/components/contact-info';
+import { openapiQuery } from '@/lib/api';
 
 const CompanyPage = () => {
   const params = useParams();

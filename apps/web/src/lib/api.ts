@@ -14,7 +14,6 @@ export const authMiddleware = (
   async onRequest({ request }) {
     try {
       const session = await getSession();
-      console.log('ON REQUEST', session);
 
       if (session?.access_token) {
         request.headers.set('Authorization', `Bearer ${session.access_token}`);

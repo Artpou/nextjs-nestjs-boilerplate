@@ -6,6 +6,24 @@ alwaysApply: true
 - Turborepo is used for monorepo management
 - use "@/" for absolute imports
 - use "@workspace/" for workspace packages
+- biome pattern for imports is:
+```
+"groups": [
+    ":NODE:",
+    ":BLANK_LINE:",
+    ["react", "react/**", "next", "next/**"],
+    ":BLANK_LINE:",
+    ["**", "!@workspace/**", "!@/**", "!./**"],
+    ":BLANK_LINE:",
+    ["@workspace/**", "!@workspace/ui/**"],
+    ":BLANK_LINE:",
+    ["@workspace/ui/**"],
+    ":BLANK_LINE:",
+    ["@/**"],
+    ":BLANK_LINE:",
+    ["./**"]
+]
+```
 
 ## Project Development
 - biome is used for linting and formatting

@@ -12,7 +12,7 @@ export const companies = pgTable('companies', {
   name: varchar('name', { length: 255 }).notNull(),
   description: text('description'),
   website: varchar('website', { length: 255 }),
-  email: varchar('email', { length: 255 }),
+  email: varchar('email', { length: 255 }).unique(),
   phone: varchar('phone', { length: 50 }),
   address: text('address'),
 });

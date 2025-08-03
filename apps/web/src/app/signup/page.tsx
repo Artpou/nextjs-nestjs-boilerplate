@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
 import { signIn } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
@@ -15,7 +14,7 @@ import { Button } from '@workspace/ui/components/button';
 import { Card } from '@workspace/ui/components/card';
 import { Input, InputWrapper } from '@workspace/ui/components/input';
 
-import useAPI from '@/hooks/useAPI';
+import { openapiQuery } from '@/lib/api';
 
 const RegisterSchema = z.object({
   email: z.string().email(),
@@ -25,7 +24,6 @@ type RegisterBody = z.infer<typeof RegisterSchema>;
 
 const SignupPage = () => {
   const router = useRouter();
-  const { POST } = useAPI();
   const t = useTranslations();
 
   const {
@@ -37,31 +35,29 @@ const SignupPage = () => {
     resolver: zodResolver(RegisterSchema),
   });
 
-  const { mutate: signup, isPending } = useMutation({
-    mutationFn: async (data: RegisterBody) => {
-      const { error } = await POST('/auth/register', {
-        body: data,
-      });
-
-      if (error) throw error;
-
-      const signInResult = await signIn('credentials', {
-        ...data,
-        redirect: false,
-      });
-      if (signInResult?.error) throw signInResult.error;
+  const { mutate: signup, isPending } = openapiQuery.useMutation(
+    'post',
+    '/auth/register',
+    {
+      mutationFn: async (data: RegisterBody) => {
+        const signInResult = await signIn('credentials', {
+          ...data,
+          redirect: false,
+        });
+        if (signInResult?.error) throw signInResult.error;
+      },
+      onSuccess: () => {
+        router.push('/');
+        router.refresh();
+      },
+      onError: (error) => {
+        setError('root', { message: error });
+      },
     },
-    onSuccess: () => {
-      router.push('/');
-      router.refresh();
-    },
-    onError: (error) => {
-      setError('root', { message: error.message });
-    },
-  });
+  );
 
   const onSubmit = (data: RegisterBody): void => {
-    signup(data);
+    signup({ body: data });
   };
 
   return (

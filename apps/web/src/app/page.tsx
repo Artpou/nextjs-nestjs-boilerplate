@@ -28,7 +28,7 @@ export default async function Home() {
   return (
     <div className="flex size-full gap-4 p-6">
       <div className="flex flex-col gap-4">
-        <h1 className="text-2xl font-bold">Site name</h1>
+        <h1 className="text-2xl font-bold">SITE_NAME</h1>
         <p className="text-muted-foreground">
           This is a test page. You can view company information below.
         </p>

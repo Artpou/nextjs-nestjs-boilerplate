@@ -3,7 +3,7 @@ import { Home, UserRound } from 'lucide-react';
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'Site name',
+  name: 'SITE_NAME',
   description: '',
   navItems: [
     {

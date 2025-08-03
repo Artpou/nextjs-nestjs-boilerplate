@@ -23,6 +23,12 @@ export class UserService extends EntityService<UserEntity> {
     });
   }
 
+  async findByEmail(email: string): Promise<User | undefined> {
+    return await this.db.query.users.findFirst({
+      where: eq(this.table.email, email),
+    });
+  }
+
   async create(insert: EntityInsert<UserEntity>, tx?: Tx): Promise<User> {
     const password = await hash(insert.password ?? '', 10);
 

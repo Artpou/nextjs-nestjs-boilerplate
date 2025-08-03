@@ -23,6 +23,12 @@ export class CompanyService extends EntityService<CompanyEntity> {
     });
   }
 
+  async findByEmail(email: string): Promise<Company | undefined> {
+    return await this.db.query.companies.findFirst({
+      where: eq(this.table.email, email),
+    });
+  }
+
   async exist(id: string): Promise<boolean> {
     const company = await this.db.query.companies.findFirst({
       columns: { id: true },

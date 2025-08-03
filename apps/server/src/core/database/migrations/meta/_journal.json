@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1754137257718,
-      "tag": "0000_typical_living_lightning",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1754137823200,
-      "tag": "0001_lowly_wallflower",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1754138059773,
-      "tag": "0002_polite_chronomancer",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1754138230053,
-      "tag": "0003_careless_zuras",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1754138259361,
-      "tag": "0004_awesome_lady_vermin",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1754138594823,
-      "tag": "0005_slow_vision",
+      "when": 1754218355938,
+      "tag": "0000_high_pride",
       "breakpoints": true
     }
   ]

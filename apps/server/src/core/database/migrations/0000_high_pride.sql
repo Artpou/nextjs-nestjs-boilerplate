@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "companies" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"name" varchar(255) NOT NULL,
@@ -11,13 +11,13 @@ CREATE TABLE IF NOT EXISTS "companies" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"password" text,
 	"name" varchar(255),
-	"company_id" integer,
+	"company_id" uuid,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

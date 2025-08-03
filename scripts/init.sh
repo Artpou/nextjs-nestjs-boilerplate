@@ -107,8 +107,6 @@ EOF
 install_dependencies() {
     print_status "Installing dependencies..."
     pnpm install
-    pnpm install @biomejs/biome --global
-    pnpm install turbo --global
     print_success "Dependencies installed successfully!"
 }
 
@@ -186,7 +184,7 @@ main() {
     printf "${GREEN}🎉 Setup completed successfully!${NC}\n"
     echo ""
     echo "Next steps:"
-    printf "1. Start the development server: ${BLUE}turbo dev${NC}\n"
+    printf "1. Start the development server: ${BLUE}pnpm turbo dev${NC}\n"
     printf "2. Open your browser to: ${BLUE}http://localhost:3000${NC}\n"
     printf "3. API documentation: ${BLUE}http://localhost:3001/api${NC}\n"
     echo ""

@@ -26,16 +26,6 @@ This boilerplate combines the best of both worlds: Next.js's amazing developer e
 - 🐳 **[Docker](https://www.docker.com/)**: Containerization with Docker.
 - 🐕 **[Husky](https://typicode.github.io/husky/)**: Git hooks for code quality and consistency.
 
-## Apps and Packages
-
-- `server`: A [NestJS](https://nestjs.com/) server application providing the backend API.
-- `web`: A [Next.js](https://nextjs.org) web application.
-- `@workspace/ui`: A stub React component library used by `web`.
-- `@workspace/openapi`: OpenAPI schema and generated API client used by the web application.
-- `@workspace/*-config`: Shared configurations for TypeScript, etc.
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
 ## Getting Started
 
 ### Prerequisites
@@ -46,42 +36,16 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ### Installation
 
-1. **Clone the repository**:
+You can use the script to initialize the project:
 
-   ```bash
-   git clone <your-repo-url>
-   cd <your-repo-directory>
-   ```
+```bash
+./scripts/init.sh
+```
 
-2. **Install dependencies**:
+This will create the necessary files and directories, and set up the project with the correct environment variables.
 
-   ```bash
-   pnpm install
-   ```
+### Running the project
 
-3. **Set up environment variables**:
-
-   - Copy `.env.example` to `.env` in both `apps/web` and `apps/server` directories and configure as needed.
-
-4. **Start Docker services**:
-
-   ```bash
-   docker compose up -d
-   ```
-
-   This will start PostgreSQL and other required services in the background.
-
-5. **Run the development server**:
-
-   ```bash
-   pnpm run dev
-   ```
-
-6. **Build for production**:
-   ```bash
-   pnpm run build
-   ```
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+```bash
+pnpm turbo dev
+```

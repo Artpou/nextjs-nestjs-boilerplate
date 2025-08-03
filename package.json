@@ -9,6 +9,7 @@
     "lint:fix": "pnpm turbo run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "generate-schema": "pnpm turbo run generate-schema --filter=server",
+    "init": "./scripts/init.sh",
     "clean": "pnpm turbo run clean",
     "prepare": "husky"
   },

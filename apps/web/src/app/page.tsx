@@ -5,23 +5,10 @@ import { getTranslations } from 'next-intl/server';
 import { Button } from '@workspace/ui/components/button';
 
 import { auth } from '@/auth';
-import { getAPI } from '@/lib/api';
-
-// interface HomeProps {
-//   searchParams: {
-//     feed?: string;
-//     sidebar?: string;
-//   };
-// }
 
 export default async function Home() {
   const session = await auth();
   const t = await getTranslations('common');
-
-  const { GET } = getAPI();
-  const { data } = await GET('/auth/me');
-  // biome-ignore lint/suspicious/noConsole: log
-  console.log('🚀 ~ Home ~ data:', data);
 
   if (!session) {
     return (
@@ -46,7 +33,9 @@ export default async function Home() {
           This is a test page. You can view company information below.
         </p>
         <Button asChild>
-          <Link href="/company/1">View Company (ID: 1)</Link>
+          <Link href="/company/eab6cd4f-d7bf-44d9-b707-d0437724d149">
+            View Company
+          </Link>
         </Button>
       </div>
     </div>

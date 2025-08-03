@@ -67,7 +67,6 @@
     "@types/bcrypt": "^5.0.2",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
-    "@workspace/request": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "cache-manager-redis-store": "^3.0.1",
     "cache-manager-redis-yet": "^5.1.5",

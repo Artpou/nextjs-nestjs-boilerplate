@@ -13,7 +13,6 @@ import { DrizzleModule } from './core/database/drizzle/drizzle.module';
 import { HttpExceptionFilter } from './core/shared/filters/http-exception.filter';
 import { LoggerMiddleware } from './core/shared/middleware/logger.middleware';
 import { CompanyModule } from './modules/company/company.module';
-import { MeModule } from './modules/me/me.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -53,7 +52,6 @@ import { UserModule } from './modules/user/user.module';
     ]),
     AuthModule,
     CompanyModule,
-    MeModule,
     UserModule,
   ],
   providers: [

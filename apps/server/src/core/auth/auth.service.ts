@@ -4,15 +4,14 @@ import { compare } from 'bcrypt';
 import { jwtDecode } from 'jwt-decode';
 import { User } from '../../modules/user/user.model';
 
+import { UserService } from '@/modules/user/user.service';
+
 import {
   LoginBody,
   RefreshBody,
   RegisterBody,
-} from '@workspace/request/auth.request';
-
-import { UserService } from '@/modules/user/user.service';
-
-import { TokenResponse } from './auth.schema';
+  TokenResponse,
+} from './auth.dto';
 
 const ACCESS_TOKEN_EXPIRE_TIME = '30m';
 const REFRESH_TOKEN_EXPIRE_TIME = '59m';

@@ -7,8 +7,10 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../core/auth/auth.guard';
 
 import { Company, CompanyEntity } from './company.model';
 import { CompanyService } from './company.service';
@@ -21,12 +23,14 @@ export class CompanyController {
   constructor(private companyService: CompanyService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: [company.selectDto] })
   async findAll(): Promise<Company[]> {
     return await this.companyService.findMany();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: company.selectDto })
   async findById(@Param('id', ParseUUIDPipe) id: string): Promise<Company> {
     const company = await this.companyService.findById(id);

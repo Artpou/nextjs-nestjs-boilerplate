@@ -8,13 +8,18 @@ import { useMutation } from '@tanstack/react-query';
 import { signIn } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-
-import { type LoginBody, LoginSchema } from '@workspace/request/auth.request';
+import { z } from 'zod';
 
 import { Alert, AlertTitle } from '@workspace/ui/components/alert';
 import { Button } from '@workspace/ui/components/button';
 import { Card } from '@workspace/ui/components/card';
 import { Input, InputWrapper } from '@workspace/ui/components/input';
+
+const LoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+type LoginBody = z.infer<typeof LoginSchema>;
 
 const LoginPage = () => {
   const t = useTranslations();
@@ -62,6 +67,7 @@ const LoginPage = () => {
               <AlertTitle>{errors.root.message}</AlertTitle>
             </Alert>
           )}
+
           <InputWrapper
             className="w-full"
             label="Email"
@@ -69,6 +75,7 @@ const LoginPage = () => {
           >
             <Input type="email" {...register('email')} />
           </InputWrapper>
+
           <InputWrapper
             className="w-full"
             label="Password"
@@ -76,10 +83,12 @@ const LoginPage = () => {
           >
             <Input type="password" {...register('password')} />
           </InputWrapper>
+
           <div className="flex items-center justify-center gap-4">
             <Button variant="secondary" asChild>
               <Link href="/">{t('common.cancel')}</Link>
             </Button>
+
             <Button type="submit" isLoading={isPending}>
               {t('common.signIn')}
             </Button>

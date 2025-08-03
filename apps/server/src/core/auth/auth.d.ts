@@ -4,7 +4,7 @@ import { Request } from 'fastify';
 
 export interface AuthenticatedRequest extends Request {
   user: {
-    sub: string;
+    id: string;
   };
   provider?: InferSelectModel<typeof providers>;
 }

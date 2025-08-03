@@ -1,5 +1,6 @@
 import type { Session } from 'next-auth';
 import createClient, { type Middleware } from 'openapi-fetch';
+import createReactQueryClient from 'openapi-react-query';
 
 import type { paths } from '@workspace/openapi';
 
@@ -11,20 +12,22 @@ export const authMiddleware = (
   getSession: () => Promise<Session | null>,
 ): Middleware => ({
   async onRequest({ request }) {
-    (await auth()) || {};
+    try {
+      const session = await getSession();
+      console.log('ON REQUEST', session);
 
-    const session = await getSession();
-    if (session) {
-      request.headers.set('Authorization', `Bearer ${session.access_token}`);
+      if (session?.access_token) {
+        request.headers.set('Authorization', `Bearer ${session.access_token}`);
+      }
+    } catch (error) {
+      /** biome-ignore lint/suspicious/noConsole: need auth logs */
+      console.warn('Failed to get session for API request:', error);
     }
   },
 });
 
-export const client = createClient<paths>({
+export const openapi = createClient<paths>({
   baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL,
 });
-
-export function getAPI() {
-  client.use(authMiddleware(auth));
-  return client;
-}
+openapi.use(authMiddleware(auth));
+export const openapiQuery = createReactQueryClient(openapi);

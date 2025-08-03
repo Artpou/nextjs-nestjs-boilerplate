@@ -7,7 +7,7 @@ import type createClient from 'openapi-fetch';
 
 import type { paths } from '@workspace/openapi';
 
-import { authMiddleware, client, type Middleware } from '@/lib/api';
+import { authMiddleware, type Middleware, openapi } from '@/lib/api';
 
 export type APIContextType = ReturnType<typeof createClient<paths>>;
 
@@ -19,15 +19,15 @@ export function APIProvider({ children }: { children: React.ReactNode }) {
 
     const setupAuth = async () => {
       middleware = authMiddleware(getSession);
-      await client.use(middleware);
+      await openapi.use(middleware);
     };
 
     setupAuth();
 
     return () => {
-      if (middleware) client.eject(middleware);
+      if (middleware) openapi.eject(middleware);
     };
   }, []);
 
-  return <APIContext.Provider value={client}>{children}</APIContext.Provider>;
+  return <APIContext.Provider value={openapi}>{children}</APIContext.Provider>;
 }

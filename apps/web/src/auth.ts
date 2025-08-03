@@ -39,15 +39,7 @@ export const config: NextAuthConfig = {
     async signIn({ account, profile, user }) {
       if (!profile || !account) return true;
 
-      // @ts-expect-error inject access_token
-      user.access_token = data.access_token;
-      // @ts-expect-error inject refresh_token
-      user.refresh_token = data.refresh_token;
-      // @ts-expect-error inject expires_in
-      user.expires_in = data.expires_in;
-      // @ts-expect-error inject provider
-      user.provider = data.provider;
-
+      // The user object already contains the tokens from the authorize callback
       return true;
     },
     async jwt({ token, user }) {

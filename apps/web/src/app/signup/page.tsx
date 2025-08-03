@@ -8,11 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { signIn } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
-
-import {
-  type RegisterBody,
-  RegisterSchema,
-} from '@workspace/request/auth.request';
+import { z } from 'zod';
 
 import { Alert, AlertTitle } from '@workspace/ui/components/alert';
 import { Button } from '@workspace/ui/components/button';
@@ -20,6 +16,12 @@ import { Card } from '@workspace/ui/components/card';
 import { Input, InputWrapper } from '@workspace/ui/components/input';
 
 import useAPI from '@/hooks/useAPI';
+
+const RegisterSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
+type RegisterBody = z.infer<typeof RegisterSchema>;
 
 const SignupPage = () => {
   const router = useRouter();

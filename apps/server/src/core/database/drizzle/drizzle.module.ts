@@ -21,7 +21,7 @@ export type Tx = Parameters<Parameters<DrizzleDB['transaction']>[0]>[0];
         const databasURL = configService.get<string>('DATABASE_URL');
         const pool = new Pool({
           connectionString: databasURL,
-          ssl: process.env.NODE_ENV === 'development',
+          ssl: process.env.NODE_ENV === 'production',
         });
         return drizzle(pool, { schema }) as NodePgDatabase<typeof schema>;
       },

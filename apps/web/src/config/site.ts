@@ -13,7 +13,7 @@ export const siteConfig = {
     },
     {
       label: 'profile',
-      href: '/profile',
+      href: '/me',
       icon: UserRound,
     },
   ],

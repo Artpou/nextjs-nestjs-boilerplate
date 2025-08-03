@@ -8,26 +8,22 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
-import { createZodDto } from 'nestjs-zod';
-
-import {
-  LoginSchema,
-  RefreshSchema,
-  RegisterSchema,
-} from '@workspace/request/auth.request';
+import { User, UserEntity } from '../../modules/user/user.model';
 
 import { UserService } from '@/modules/user/user.service';
 
 import type { AuthenticatedRequest } from './auth';
+import {
+  LoginDto,
+  RefreshDto,
+  RegisterDto,
+  TokenResponse,
+  TokenResponseDto,
+} from './auth.dto';
 import { JwtAuthGuard } from './auth.guard';
-import { TokenResponse, TokenResponseSchema } from './auth.schema';
 import { AuthService } from './auth.service';
 
-class LoginDto extends createZodDto(LoginSchema) {}
-class RefreshDto extends createZodDto(RefreshSchema) {}
-class RegisterDto extends createZodDto(RegisterSchema) {}
-
-class TokenResponseDto extends createZodDto(TokenResponseSchema) {}
+const entity = new UserEntity();
 
 @ApiTags('auth')
 @Controller('auth')
@@ -58,8 +54,9 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  async me(@Request() req: AuthenticatedRequest) {
-    return await this.userService.findById(req.user.sub);
+  @ApiOkResponse({ type: entity.selectDto })
+  async me(@Request() req: AuthenticatedRequest): Promise<User | undefined> {
+    return await this.userService.findById(req.user.id);
   }
 
   @Post('logout')

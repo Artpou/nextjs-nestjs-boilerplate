@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import ms from 'ms';
 
 export function ReactQueryProvider({
   children,
@@ -14,7 +15,10 @@ export function ReactQueryProvider({
       new QueryClient({
         defaultOptions: {
           queries: {
+            staleTime: ms('1m'),
             retry: false,
+            refetchOnWindowFocus: false,
+            refetchOnMount: false,
           },
         },
       }),

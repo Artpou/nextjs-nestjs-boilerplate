@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import LogoutButton from '../button/button-logout';
 
@@ -21,6 +22,7 @@ import { siteConfig } from '@/config/site';
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { data } = useSession();
   const { open } = useSidebar();
   const t = useTranslations('sidebar');
 
@@ -29,6 +31,8 @@ export function AppSidebar() {
     // biome-ignore lint/suspicious/noExplicitAny: need any type
     title: t(item.label as any),
   }));
+
+  if (!data) return null;
 
   return (
     <Sidebar collapsible="icon">

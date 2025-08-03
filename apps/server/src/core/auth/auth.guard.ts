@@ -9,8 +9,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   handleRequest<AuthenticatedRequest>(
     err: Error,
-    user: number,
+    user: string,
   ): AuthenticatedRequest {
+    console.log(err, user);
     if (err) throw new UnauthorizedException(err.message);
     if (!user) throw new UnauthorizedException('No user found');
 

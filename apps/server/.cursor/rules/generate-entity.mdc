@@ -1,0 +1,11 @@
+---
+globs: apps/server/**
+alwaysApply: false
+title: Generate a backend entity 
+description: Run the backend entity generator script that creates all the necessary files for a new entity
+---
+## Component Development
+- Generate entity with the following command in the root of the project:
+```bash
+pnpm --filter=apps/server run generate:entity <entity-name>
+```

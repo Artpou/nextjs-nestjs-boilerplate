@@ -1,0 +1,12 @@
+---
+globs: apps/server/**
+alwaysApply: false
+title: Backend project standards
+description: Guidance on tools and practices used in the backend
+---
+
+## Project Development
+- Use drizzle-kit for database migrations
+- Use drizzle-orm for database queries
+- Use drizzle-zod for database schema validation
+- Use drizzle-kit for database migrations

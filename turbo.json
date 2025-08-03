@@ -5,10 +5,12 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
-    "lint": {
-      "outputs": []
+    "lint": {},
+    "lint:fix": {
+      "cache": false
     },
     "dev": {
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },
@@ -17,10 +19,21 @@
     },
     "generate-schema": {
       "cache": false
+    },
+    "clean": {
+      "cache": false
     }
   },
   "remoteCache": {
     "signature": true
   },
-  "globalEnv": ["NODE_ENV", "JWT_SECRET", "JWT_REFRESH_SECRET", "ANALYZE", "AUTH_SECRET"]
+  "globalEnv": [
+    "NODE_ENV",
+    "JWT_SECRET",
+    "JWT_REFRESH_SECRET",
+    "REDIS_URL",
+    "ANALYZE",
+    "AUTH_SECRET",
+    "DATABASE_URL"
+  ]
 }

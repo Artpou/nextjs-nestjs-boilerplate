@@ -6,19 +6,24 @@
     "build": "pnpm turbo run build",
     "dev": "pnpm turbo run dev --parallel",
     "lint": "pnpm turbo run lint",
+    "lint:fix": "pnpm turbo run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "generate-schema": "pnpm turbo run generate-schema --filter=server"
+    "generate-schema": "pnpm turbo run generate-schema --filter=server",
+    "clean": "pnpm turbo run clean",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,md}": [
+      "biome check --write"
+    ]
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/node": "^18.11.17",
-    "@types/passport-jwt": "^4.0.1",
-    "@types/passport-local": "^1.0.38",
-    "husky": "^8.0.0",
+    "@biomejs/biome": "2.1.3",
+    "@types/node": "catalog:",
+    "husky": "^9.1.7",
     "lint-staged": "^13.1.0",
-    "prettier": "^3.0.0",
-    "turbo": "^2.3.3",
-    "typescript": "^5.7.2"
+    "turbo": "^2.5.5",
+    "typescript": "catalog:"
   },
   "engines": {
     "node": ">=20.0.0"

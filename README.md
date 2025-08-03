@@ -8,7 +8,7 @@ This boilerplate combines the best of both worlds: Next.js's amazing developer e
 
 - 🚀 **Turborepo**: Efficient monorepo management.
 - 🔒 **Strict Mode**: TypeScript strict mode enabled across all packages for enhanced type safety.
-- 🎯 **ESLint**: Comprehensive linting configuration with TypeScript support and consistent code style enforcement.
+- 🎯 **Biome**: Fast and reliable linting and formatting with TypeScript support and consistent code style enforcement.
 
 ### Server
 
@@ -35,9 +35,9 @@ This boilerplate combines the best of both worlds: Next.js's amazing developer e
 
 - `server`: A [NestJS](https://nestjs.com/) server application providing the backend API.
 - `web`: A [Next.js](https://nextjs.org) web application.
-- `@repo/ui`: A stub React component library used by `web`.
-- `@repo/openapi`: OpenAPI schema and generated API client used by the web application.
-- `@repo/*-config`: Shared configurations for ESLint, TypeScript, etc.
+- `@workspace/ui`: A stub React component library used by `web`.
+- `@workspace/openapi`: OpenAPI schema and generated API client used by the web application.
+- `@workspace/*-config`: Shared configurations for TypeScript, etc.
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 

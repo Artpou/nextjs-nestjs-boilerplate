@@ -1,91 +1,87 @@
-import type { NextAuthConfig, Session } from "next-auth";
+import type { NextAuthConfig, Session } from 'next-auth';
+import NextAuth from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
+import Credentials from 'next-auth/providers/credentials';
+import createClient from 'openapi-fetch';
 
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { JWT } from "next-auth/jwt";
+import type { paths } from '@workspace/openapi';
 
-type CredentialToken = JWT & {
-  token: string;
-  refreshToken: string;
-  expiresIn: number;
-};
+const client = createClient<paths>({
+  baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL,
+});
 
-type JWTSession = Session & {
-  accessToken: string;
-  refreshToken: string;
-};
+let isRefreshing = false;
 
 export const config: NextAuthConfig = {
   providers: [
     Credentials({
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials): Promise<CredentialToken> {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: credentials.email as string,
-              password: credentials.password as string,
-            }),
+      async authorize(credentials): Promise<JWT> {
+        const { data, error } = await client.POST('/auth/login', {
+          body: {
+            email: credentials.email as string,
+            password: credentials.password as string,
           },
-        );
+        });
 
-        if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || "Failed to authenticate");
+        if (error) {
+          throw new Error(error || 'Failed to authenticate');
         }
 
-        const data = await response.json();
         return data;
       },
     }),
   ],
   callbacks: {
+    async signIn({ account, profile, user }) {
+      if (!profile || !account) return true;
+
+      // The user object already contains the tokens from the authorize callback
+      return true;
+    },
     async jwt({ token, user }) {
       if (user) return { ...token, ...user };
 
-      const credentialToken = token as CredentialToken;
-      const isExpired = new Date() > new Date(credentialToken?.expiresIn || 0);
+      if (isRefreshing) return token;
 
+      const credentialToken = token as JWT;
+      if (!credentialToken?.expires_in) return null;
+
+      const isExpired = Date.now() > credentialToken.expires_in;
       if (!isExpired) return token;
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${credentialToken?.token}`,
-          },
-          body: JSON.stringify({
-            refresh: credentialToken?.refreshToken,
-          }),
+      isRefreshing = true;
+
+      const { data, error } = await client.POST('/auth/refresh', {
+        body: {
+          refresh: credentialToken?.refresh_token,
         },
-      );
+      });
 
-      if (!response.ok) {
-        return null;
-      }
+      isRefreshing = false;
 
-      const data = await response.json();
+      if (error) return null;
+
       return { ...token, ...data };
     },
-    async session({ token, session }): Promise<JWTSession> {
+    async session({ token, session }): Promise<Session> {
       return {
         ...session,
-        accessToken: (token as CredentialToken).token,
-        refreshToken: (token as CredentialToken).refreshToken,
+        access_token: token.access_token as string,
+        refresh_token: token.refresh_token as string,
       };
     },
   },
-  pages: {},
+  pages: {
+    signIn: '/login',
+    newUser: '/signup',
+    error: '/',
+  },
+  secret: process.env.AUTH_SECRET,
+  trustHost: true,
 } satisfies NextAuthConfig;
 
 export const {

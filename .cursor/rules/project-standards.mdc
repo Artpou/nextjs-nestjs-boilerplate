@@ -1,0 +1,40 @@
+---
+alwaysApply: true
+---
+
+## Project Structure
+- Turborepo is used for monorepo management
+- use "@/" for absolute imports
+- use "@workspace/" for workspace packages
+- biome pattern for imports is:
+```
+"groups": [
+    ":NODE:",
+    ":BLANK_LINE:",
+    ["react", "react/**", "next", "next/**"],
+    ":BLANK_LINE:",
+    ["**", "!@workspace/**", "!@/**", "!./**"],
+    ":BLANK_LINE:",
+    ["@workspace/**", "!@workspace/ui/**"],
+    ":BLANK_LINE:",
+    ["@workspace/ui/**"],
+    ":BLANK_LINE:",
+    ["@/**"],
+    ":BLANK_LINE:",
+    ["./**"]
+]
+```
+
+## Project Development
+- biome is used for linting and formatting
+- strict mode is enabled for all packages
+- docker is used for containerization
+- husky is used for git hooks
+- pnpm is used as package manager
+- install specific packages in the root of the project with:
+```bash
+pnpm --filter=<app-name> add <package-name>
+```
+
+## Component Development
+- Avoid "any" type.

@@ -1,0 +1,16 @@
+---
+globs: apps/web/**
+alwaysApply: false
+title: Frontend project standards
+description: Guidance on tools and practices used in the frontend
+---
+## Component Development
+- use zod for validation
+- use react-hook-form for form handling
+- use react-intl for internationalization
+- use react-router for routing
+
+## Data Fetching
+- use openapi-react-query for data fetching
+- import openapiQuery from '@/lib/api'
+- typ is automatically generated from the openapi schema

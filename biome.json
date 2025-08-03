@@ -1,0 +1,70 @@
+{
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              ":NODE:",
+              ":BLANK_LINE:",
+              ["react", "react/**", "next", "next/**"],
+              ":BLANK_LINE:",
+              ["**", "!@workspace/**", "!@/**", "!./**"],
+              ":BLANK_LINE:",
+              ["@workspace/**", "!@workspace/ui/**"],
+              ":BLANK_LINE:",
+              ["@workspace/ui/**"],
+              ":BLANK_LINE:",
+              ["@/**"],
+              ":BLANK_LINE:",
+              ["./**"]
+            ]
+          }
+        }
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noConsole": "warn"
+      },
+      "correctness": {
+        "noUnusedVariables": "warn"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "warn",
+        "noUselessConstructor": "off"
+      },
+      "style": {
+        "useImportType": "off"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 80
+  },
+  "javascript": {
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
+    },
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "experimentalScannerIgnores": ["dist/**", "node_modules/**", ".next/**"]
+  }
+}

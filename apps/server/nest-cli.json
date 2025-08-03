@@ -1,4 +1,11 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src"
+  "sourceRoot": "src",
+  "schematics": {
+    "module": {
+      "factory": "./schematics/module",
+      "schema": "./schematics/module/schema.json",
+      "description": "Generate a complete module with model, service, controller, and module files"
+    }
+  }
 }

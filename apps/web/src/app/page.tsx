@@ -1,35 +1,43 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import LogoutButton from "../components/ButtonLogout";
+import { getTranslations } from 'next-intl/server';
 
-import { auth } from "@/auth";
-import { GET } from "@/app/api/client";
+import { Button } from '@workspace/ui/components/button';
+
+import { auth } from '@/auth';
 
 export default async function Home() {
   const session = await auth();
+  const t = await getTranslations('common');
 
-  const { data } = await GET("/auth/me");
-  // eslint-disable-next-line no-console
-  console.log("🚀 ~ me :", data);
+  if (!session) {
+    return (
+      <section className="flex flex-col items-center justify-center gap-4">
+        <div className="flex flex-col gap-4">
+          <Button variant="secondary" asChild>
+            <Link href="/login">{t('login')}</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/signup">{t('signup')}</Link>
+          </Button>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="flex flex-col items-center justify-center gap-4">
-      {session?.user ? (
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-2xl">Welcome {session.user.name}!</h1>
-          <p>Email: {session.user.email}</p>
-          <LogoutButton />
-        </div>
-      ) : (
-        <div className="flex gap-4">
-          <Link className="btn btn-primary" href="/login">
-            Login
+    <div className="flex size-full gap-4 p-6">
+      <div className="flex flex-col gap-4">
+        <h1 className="text-2xl font-bold">Site name</h1>
+        <p className="text-muted-foreground">
+          This is a test page. You can view company information below.
+        </p>
+        <Button asChild>
+          <Link href="/company/eab6cd4f-d7bf-44d9-b707-d0437724d149">
+            View Company
           </Link>
-          <Link className="btn" href="/signup">
-            Sign Up
-          </Link>
-        </div>
-      )}
-    </section>
+        </Button>
+      </div>
+    </div>
   );
 }

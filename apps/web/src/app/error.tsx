@@ -1,30 +1,34 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-export default function Error({
+import { Button } from '@workspace/ui/components/button';
+
+export default function ErrorPage({
   error,
   reset,
 }: {
   error: Error;
   reset: () => void;
 }) {
-  useEffect(() => {     
-    // eslint-disable-next-line no-console
+  useEffect(() => {
+    // biome-ignore lint/suspicious/noConsole: needed for debugging
     console.error(error);
   }, [error]);
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
+    <div className="flex flex-col gap-2">
+      {process.env.NODE_ENV === 'development' ? (
+        <>
+          <span>{error.message}</span>
+          <span className="text-sm text-muted-foreground">{error.stack}</span>
+        </>
+      ) : (
+        <h2>Something went wrong!</h2>
+      )}
+      <Button className="w-fit" onClick={() => reset()}>
         Try again
-      </button>
+      </Button>
     </div>
   );
 }
